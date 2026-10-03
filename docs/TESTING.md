@@ -240,3 +240,20 @@ permission prompts, saves and agenda rendering still require installed-app testi
 Use disposable events and remove only those you created. Check Calendar before retrying any
 uncertain save. Notification delivery and scheduling-conflict detection are not verified by
 creation success; Varta does not add explicit alerts or check conflicts.
+
+
+## Natural phrasing
+
+`varta-selftest` checks polite wrappers, literal note-body preservation, temporal punctuation,
+common aliases, bare AM/PM clarification, negation and unchanged confidence/support gates.
+`eval/phrasing-cases.json` contains 32 route-only cases across supported features, including
+eight requests that must not select an automatic route. Run the opt-in live audit from the
+repository root after building the CLI:
+
+```bash
+python3 eval/check-phrasing.py --live --output eval/results/phrasing.json
+```
+
+This uses configured Jev credentials and incurs API usage. It does not execute plans or test
+speech recognition, native app behavior, or permission prompts. Results remain under the
+ignored results directory. See [the evaluation guide](../eval/README.md) for scoring and limits.

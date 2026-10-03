@@ -333,3 +333,17 @@ most 50 entries with the total count. A dedicated pipeline event presents a scro
 SwiftUI window; its log representation contains only the count. Existing titles, dates and
 calendar names do not enter Jev context or persisted agenda files. Injected stores and clocks
 exercise these paths without touching personal events.
+
+
+## Request phrasing and recovery
+
+`CommandText.body` removes only a leading polite request wrapper for the bounded Finder,
+Reminders, Calendar and explicit note-append grammars. Jev still receives the original
+transcript. The parsers retain literal payloads and negation; grammar extraction does not
+bypass intent, support classification or confidence checks. An explicit leading-negation
+guard clears executable arguments and selects a nonexecuting route even if the model
+confidently proposes the opposite action. Short aliases map to the same
+existing operations. A bare AM/PM follow-up can only complete a stored clock hour.
+
+`CommandFeedback` supplies feature-specific recovery examples for unresolved routes. It
+changes user feedback without dispatching a fallback action or relaxing routing thresholds.

@@ -302,6 +302,19 @@ the Chrome/Safari controls listed above. Varta rechecks the foreground app and m
 before pressing. Other apps, arbitrary buttons, confirmation dialogs, and localized menu paths
 are unsupported.
 
+### Natural phrasing
+
+You can begin supported requests with “please,” “can you,” “could you,” or “would you.”
+We keep the original request for intent classification and preserve literal note content.
+You can also say “take me to my Downloads folder,” “set a reminder to call mom tomorrow,”
+“put review on my calendar tomorrow at 3 PM for 30 minutes,” or “what’s on my calendar for
+tomorrow?” When a reminder or event already has an ambiguous clock hour, replying “AM” or
+“PM” completes that time without changing its day. Missing hours still need a full time.
+
+If we cannot resolve a command, we show a supported example for the relevant feature.
+These phrasing variations retain the same action limits and confidence thresholds. Requests
+that begin with negation, such as “please do not mute my Mac,” take no action.
+
 ### Current limits
 
 Varta can decline uncertain requests and ignore speech classified as a non-command.

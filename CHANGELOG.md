@@ -38,6 +38,12 @@ patch releases address fixes.
 
 ### Fixed
 
+- Prevent leading negative requests such as “do not mute” from becoming the opposite action.
+- Accept polite request prefixes and common Finder, Reminders and Calendar phrasings without changing confidence gates.
+- Preserve dictated note content while handling polite append requests and question punctuation.
+- Accept bare AM/PM clarification when the original request already specifies an hour.
+- Replace generic routing failures with examples for the relevant feature.
+
 - Extract explicit note-append phrases directly so uncertain model boundaries cannot include the word “note” in the target title.
 - Accept Notes’ standard font-size heading spans when appending to simple notes.
 
