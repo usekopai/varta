@@ -13,6 +13,8 @@ public enum Router {
     static let searchYes = 0.50
 
     public static let intents: [(String, String)] = [
+        ("audio_control", "Control Mac system output volume: set a percentage, increase, decrease, mute or unmute. Not microphone mute or volume inside a named app."),
+        ("playback_control", "Pause, resume, skip to the next track or return to the previous track in Spotify or Apple Music. Not a request to find new music or control another app."),
         ("play_music", "Play music or audio: a song, album, artist, playlist, podcast, or a genre or mood of music."),
         ("open_site", "Open a specific website or web page by its name or address, without searching for something."),
         ("web_search", "Search for one or more things: information, products, places, or videos, on the web or on a named site such as YouTube or Amazon."),
@@ -106,6 +108,14 @@ public enum Router {
                                      Array((domains + spanOpts).prefix(250)), "The command names no website.")),
             ("search_engine", choiceQ("Where does `command` ask for the search to happen?", engines.map { ($0.0, .string($0.1)) })),
         ]
+        q.append(("audio_action", choiceQ("Which system output-volume operation is requested? Microphone mute and per-app volume are unsupported.",
+            [("set", "Set an absolute output volume."), ("increase", "Increase output volume."), ("decrease", "Decrease output volume."), ("mute", "Mute system output."), ("unmute", "Unmute system output."), (Candidates.none, "No supported operation.")].map { ($0.0, .string($0.1)) })))
+        q.append(("audio_amount", choiceQ("What integer percentage from 0 to 100 is explicitly requested, either as an absolute volume or the amount to increase/decrease? Choose default only if no amount is specified for a relative increase/decrease. Choose none if outside this range, fractional, unclear, or missing for an absolute setting. Never invent an amount.",
+            (0...100).map { (String($0), JSON.null) } + [("default", "Relative volume change with no amount specified."), (Candidates.none, "No valid percentage.")])))
+        q.append(("playback_action", choiceQ("Which playback control is requested?",
+            [("pause", "Pause playback."), ("resume", "Resume existing playback."), ("next", "Next track."), ("previous", "Previous track."), (Candidates.none, "No supported control.")].map { ($0.0, .string($0.1)) })))
+        q.append(("control_player", choiceQ("Which music player does the command explicitly name? Do not infer a player when none is named.",
+            [("Spotify", "Spotify."), ("Music", "Apple Music or Music.app."), ("automatic", "No player or other application is named."), ("unsupported", "Another application or player is named.")].map { ($0.0, .string($0.1)) })))
         for (i, part) in cl.parts.enumerated() {
             q.append(("search_q_\(i)", spanChoice(
                 obj(("part", .string(part)),
@@ -167,6 +177,31 @@ public enum Router {
 
         var used: [Arg] = []
         switch plan.intent {
+        case "audio_control":
+            let action = choice(a["audio_action"])
+            let amount = choice(a["audio_amount"])
+            plan.args["operation"] = action
+            used.append(action)
+            if action.text == "set" || action.text == "increase" || action.text == "decrease" {
+                if let text = amount.text, let n = Int(text), (0...100).contains(n) {
+                    plan.args["amount"] = Arg(.number(Double(n)), amount.confidence)
+                    used.append(amount)
+                } else if action.text == "set" {
+                    used.append(Arg(.none, 0))
+                } else if amount.text == "default" && amount.confidence >= fastArg {
+                    plan.args["amount"] = Arg(.number(10), amount.confidence)
+                    used.append(amount)
+                } else { used.append(Arg(.none, 0)) }
+            }
+            plan.action = "change system output volume"
+        case "playback_control":
+            let action = choice(a["playback_action"])
+            let player = choice(a["control_player"])
+            plan.args["operation"] = action
+            plan.args["player"] = player
+            used += [action, player]
+            if player.text == "unsupported" { used.append(Arg(.none, 0)) }
+            plan.action = "control playback in \(player.text ?? "the active player")"
         case "play_music":
             let song = span(a["music_song"]), artist = span(a["music_artist"]), mood = span(a["music_mood"])
             let kind = choice(a["music_kind"])

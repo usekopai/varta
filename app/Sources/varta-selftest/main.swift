@@ -61,6 +61,8 @@ expect(prep.questions.map(\.0).prefix(3) == ["intent", "app", "app_for_task"], "
 expect(prep.questions.contains { $0.0 == "search_split_2" } && !prep.questions.contains { $0.0 == "search_split_3" }, "one split question per separator")
 for (_, q) in prep.questions { expect((q["criteria"]?.object?.count ?? 0) <= 255, "choice option limit") }
 
+await audioControlTests()
+
 let pipelineFailures = await PipelineSelfTests.run()
 expect(pipelineFailures.isEmpty, "pipeline cancellation and replacement regressions: \(pipelineFailures.joined(separator: "; "))")
 

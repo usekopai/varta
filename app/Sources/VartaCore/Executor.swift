@@ -112,6 +112,8 @@ public final class Executor {
         switch plan.route {
         case .fastpath, .fastpathThenCheck:
             switch plan.intent {
+            case "audio_control": controlAudio(plan, &res, cancel: cancel)
+            case "playback_control": controlPlayback(plan, &res, cancel: cancel)
             case "open_app": exec(&res, ["open", "-a", plan.arg("app") ?? ""], cancel: cancel)
             case "open_site", "web_search": openURLs(plan, &res, cancel: cancel)
             case "play_music": playMusic(plan, &res, cancel: cancel)

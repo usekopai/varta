@@ -94,6 +94,11 @@ public final class Pipeline {
             agent = await computerUse(task: res.handoff + " Stop as soon as it is playing.", apps: ["Spotify"], cancel: cancel, emit: emit)
         }
 
+        if ["audio_control", "playback_control"].contains(plan.intent) {
+            emit(.done(ok: res.ok, summary: res.note))
+            return
+        }
+
         var verdict: Verdict?
         if check && (res.ok || agent != nil) && !cancel.isSet {
             verdict = await Verifier(jev: jev, runner: runner).check(plan)
