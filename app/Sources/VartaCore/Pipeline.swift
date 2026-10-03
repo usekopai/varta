@@ -95,7 +95,7 @@ public final class Pipeline {
             agent = await computerUse(task: res.handoff + " Stop as soon as it is playing.", apps: ["Spotify"], cancel: cancel, emit: emit)
         }
 
-        if ["audio_control", "playback_control", "browser_control", "create_note"].contains(plan.intent) {
+        if ["audio_control", "playback_control", "browser_control", "create_note", "append_note"].contains(plan.intent) {
             emit(.done(ok: res.ok, summary: res.note))
             return
         }

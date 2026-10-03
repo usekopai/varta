@@ -28,16 +28,32 @@ public struct SystemRunner: Runner {
         let out = Pipe(), err = Pipe()
         p.standardOutput = out
         p.standardError = err
-        do { try p.run() } catch { return ProcessResult(code: 127, stdout: "", stderr: "\(error)") }
         let done = DispatchSemaphore(value: 0)
         p.terminationHandler = { _ in done.signal() }
+        do { try p.run() } catch { return ProcessResult(code: 127, stdout: "", stderr: "\(error)") }
+        // Drain both pipes while the child runs. Notes readback can exceed pipe capacity.
+        final class Captured: @unchecked Sendable {
+            let lock = NSLock()
+            var data = Data()
+            func set(_ value: Data) { lock.lock(); data = value; lock.unlock() }
+            func text() -> String { lock.lock(); defer { lock.unlock() }; return String(data: data, encoding: .utf8) ?? "" }
+        }
+        let output = Captured(), errors = Captured(), drained = DispatchGroup()
+        for (handle, destination) in [(out.fileHandleForReading, output), (err.fileHandleForReading, errors)] {
+            drained.enter()
+            DispatchQueue.global().async {
+                destination.set(handle.readDataToEndOfFile())
+                drained.leave()
+            }
+        }
         if done.wait(timeout: .now() + timeout) == .timedOut {
-            p.terminate()
-            // A first AppleScript call to an app can block on macOS's "allow to control" prompt.
+            if p.isRunning { p.terminate() }
             return ProcessResult(code: 124, stdout: "", stderr: "timed out (macOS may be asking to allow automation; check for a dialog)")
         }
-        let o = String(data: out.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-        let e = String(data: err.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+        guard drained.wait(timeout: .now() + 2) == .success else {
+            return ProcessResult(code: 124, stdout: "", stderr: "timed out reading subprocess output")
+        }
+        let o = output.text(), e = errors.text()
         return ProcessResult(code: p.terminationStatus, stdout: o, stderr: e)
     }
 }
@@ -82,13 +98,13 @@ public final class Executor {
         return true
     }
 
-    func osascript(_ res: inout ExecResult, _ script: String, _ argv: String..., cancel: CancelFlag? = nil) -> String? {
+    func osascript(_ res: inout ExecResult, _ script: String, _ argv: String..., cancel: CancelFlag? = nil, redactArguments: Bool = false) -> String? {
         guard !stopped(&res, cancel) else { return nil }
-        res.ran.append("osascript <\(script.split(separator: "\n").first ?? "")…> \(argv.map { "'\($0)'" }.joined(separator: " "))")
+        res.ran.append(redactArguments ? "osascript <Notes operation; arguments omitted>" : "osascript <\(script.split(separator: "\n").first ?? "")…> \(argv.map { "'\($0)'" }.joined(separator: " "))")
         let p = runner.run(["osascript", "-e", script] + argv, timeout: 15)
         if p.code != 0 {
             res.ok = false
-            res.note = String(p.stderr.trimmingCharacters(in: .whitespacesAndNewlines).prefix(300))
+            res.note = redactArguments ? "Notes request failed (code \(p.code)). Check Automation access" : String(p.stderr.trimmingCharacters(in: .whitespacesAndNewlines).prefix(300))
             return nil
         }
         return p.stdout.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -114,6 +130,7 @@ public final class Executor {
         switch plan.route {
         case .fastpath, .fastpathThenCheck:
             switch plan.intent {
+            case "append_note": appendNote(plan, &res, cancel: cancel)
             case "create_note": createNote(plan, &res, cancel: cancel)
             case "browser_control":
                 res = browserController.execute(operation: plan.arg("operation"), browser: plan.arg("browser"), origin: browserOrigin, cancel: cancel ?? CancelFlag())

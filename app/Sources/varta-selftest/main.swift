@@ -64,6 +64,7 @@ for (_, q) in prep.questions { expect((q["criteria"]?.object?.count ?? 0) <= 255
 await audioControlTests()
 await browserControlTests()
 noteTests()
+appendNoteTests()
 
 let pipelineFailures = await PipelineSelfTests.run()
 expect(pipelineFailures.isEmpty, "pipeline cancellation and replacement regressions: \(pipelineFailures.joined(separator: "; "))")
