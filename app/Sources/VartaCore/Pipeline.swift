@@ -4,6 +4,7 @@ import Foundation
 ///
 ///   route (Jev) -> fast path -> accessibility press or computer use (if needed) -> check -> one retry
 public enum PipelineEvent {
+    case agenda(CalendarAgenda)
     case thinking(String)
     case clarification(String)
     case plan(Plan)
@@ -19,6 +20,7 @@ public enum PipelineEvent {
 
     public var line: String {
         switch self {
+        case let .agenda(a): return "agenda    \(a.total) events (details omitted)"
         case let .clarification(t): return "clarify   \(t)"
         case let .thinking(t): return "heard     \(t)"
         case let .plan(p): return "plan      \(p.json)"
@@ -39,6 +41,7 @@ public final class Pipeline {
     let jev: Jev
     let executor: Executor
     let runner: Runner
+    let calendar: CalendarController
     let reminders: ReminderController
     let route: (String) async throws -> Plan
     public var useComputerUse = Features.computerUse
@@ -46,7 +49,8 @@ public final class Pipeline {
     static let runsDir = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".varta/runs")
 
     public init(jev: Jev, executor: Executor = Executor(), runner: Runner = SystemRunner(),
-                route: ((String) async throws -> Plan)? = nil, reminders: ReminderController = ReminderController()) {
+                route: ((String) async throws -> Plan)? = nil, reminders: ReminderController = ReminderController(), calendar: CalendarController = CalendarController()) {
+        self.calendar = calendar
         self.reminders = reminders
         self.jev = jev
         self.executor = executor
@@ -54,7 +58,7 @@ public final class Pipeline {
         self.route = route ?? { try await Router.route(jev: jev, transcript: $0) }
     }
 
-    public func clearPendingReminder() async { await reminders.clearPending() }
+    public func clearPendingReminder() async { await reminders.clearPending(); await calendar.clearPending() }
 
     public func run(_ text: String, cancel: CancelFlag = CancelFlag(), emit: @escaping (PipelineEvent) -> Void) async {
         guard !stopped(cancel, emit: emit) else { return }
@@ -64,6 +68,11 @@ public final class Pipeline {
         if let continued = await reminders.followup(text, cancel: cancel) {
             guard !stopped(cancel, emit: emit) else { return }
             emit(continued.needsClarification ? .clarification(continued.note) : .done(ok: continued.ok, summary: continued.note))
+            return
+        }
+        if let continued = await calendar.followup(text, cancel: cancel) {
+            guard !stopped(cancel, emit: emit) else { return }
+            emit(continued.result.needsClarification ? .clarification(continued.result.note) : .done(ok: continued.result.ok, summary: continued.result.note))
             return
         }
         let plan: Plan
@@ -94,6 +103,19 @@ public final class Pipeline {
         }
 
         guard !stopped(cancel, emit: emit) else { return }
+        if plan.intent == "calendar_control", plan.route == .fastpath {
+            let request: CalendarRequest
+            if plan.arg("operation") == "agenda", let day = plan.arg("day") {
+                request = .agenda(day: day, calendar: plan.arg("calendar"))
+            } else if plan.arg("operation") == "create", let title = plan.arg("title") {
+                request = .create(CalendarDraft(title: title, schedule: plan.arg("schedule"), duration: plan.arg("duration"), calendar: plan.arg("calendar")))
+            } else { emit(.done(ok: false, summary: "Say an event title, date and duration")); return }
+            let outcome = await calendar.perform(request, cancel: cancel)
+            guard !stopped(cancel, emit: emit) else { return }
+            if let agenda = outcome.agenda { emit(.agenda(agenda)) }
+            emit(outcome.result.needsClarification ? .clarification(outcome.result.note) : .done(ok: outcome.result.ok, summary: outcome.result.note))
+            return
+        }
         if plan.intent == "create_reminder", plan.route == .fastpath, let title = plan.arg("title") {
             let res = await reminders.create(ReminderDraft(title: title, list: plan.arg("list"), schedule: plan.arg("schedule")), cancel: cancel)
             guard !stopped(cancel, emit: emit) else { return }

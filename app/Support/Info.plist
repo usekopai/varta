@@ -20,6 +20,8 @@
     <string>15.0</string>
     <key>LSUIElement</key>
     <true/>
+    <key>NSCalendarsFullAccessUsageDescription</key>
+    <string>Varta creates events you dictate, verifies them, and shows your agenda when you ask.</string>
     <key>NSRemindersFullAccessUsageDescription</key>
     <string>Varta creates reminders you dictate and checks that they were saved correctly.</string>
     <key>NSMicrophoneUsageDescription</key>

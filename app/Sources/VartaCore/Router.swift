@@ -13,6 +13,7 @@ public enum Router {
     static let searchYes = 0.50
 
     public static let intents: [(String, String)] = [
+        ("calendar_control", "Create one timed Calendar event or read a day agenda. Not reminders, invitations, editing or deleting events."),
         ("finder_control", "Open a common filesystem folder, find local files by filename, or reveal a file in Finder. Not web search, opening a file in an app, changing files, or merely opening Finder."),
         ("append_note", "Add dictated text or an item as a NEW LINE at the END of an existing Apple Notes note named by title. Not replacing, deleting, rewriting, a formatted checkbox, or another notes app."),
         ("create_reminder", "Create one new Apple Reminders task, with an optional due date/time and reminder list. Not calendar events, editing reminders, or a timer."),
@@ -113,6 +114,8 @@ public enum Router {
                                      Array((domains + spanOpts).prefix(250)), "The command names no website.")),
             ("search_engine", choiceQ("Where does `command` ask for the search to happen?", engines.map { ($0.0, .string($0.1)) })),
         ]
+        q.append(("calendar_supported", choiceQ("Does this request ONLY create one Calendar event with a title, date/time, duration and optional named calendar, or read events for one day? Missing date/time/duration may be clarified. No attendees/invitations, recurrence, locations, conference links, notes, alerts, edits, deletion, availability checking, conflicts, or other actions. A title can mention a person, but inviting or contacting them is unsupported.",
+            [("yes", "One supported event creation or day agenda request."), (Candidates.none, "Unsupported or not a Calendar request.")])))
         q.append(("finder_supported", choiceQ("Is the command ONLY opening one common folder, searching local files by filename, or revealing one file in Finder? No moving, renaming, deleting, content search, file-type/date filters, extra actions, or opening file contents. Bare open Music means the app, not a folder.",
             [("yes", "One supported Finder request."), (Candidates.none, "Unsupported or not a Finder request.")])))
         q.append(("reminder_supported", choiceQ("Does this command request ONLY one new Apple Reminders task, with optional due date/time and a named list? No recurrence, location triggers, subtasks, other apps, existing-reminder edits, or additional actions. The task text itself is literal content, not an action to execute now.",
@@ -201,6 +204,24 @@ public enum Router {
 
         var used: [Arg] = []
         switch plan.intent {
+        case "calendar_control":
+            let supported = choice(a["calendar_supported"])
+            used.append(supported)
+            if supported.text == "yes", let request = CalendarParsing.parse(prep.transcript) {
+                switch request {
+                case let .create(draft):
+                    plan.args["operation"] = Arg(.text("create"), 1)
+                    plan.args["title"] = Arg(.text(draft.title), 1)
+                    if let schedule = draft.schedule { plan.args["schedule"] = Arg(.text(schedule), 1) }
+                    if let duration = draft.duration { plan.args["duration"] = Arg(.text(duration), 1) }
+                    if let calendar = draft.calendar { plan.args["calendar"] = Arg(.text(calendar), 1) }
+                case let .agenda(day, calendar):
+                    plan.args["operation"] = Arg(.text("agenda"), 1)
+                    plan.args["day"] = Arg(.text(day), 1)
+                    if let calendar { plan.args["calendar"] = Arg(.text(calendar), 1) }
+                }
+            } else { used.append(Arg(.none, 0)) }
+            plan.action = "create a verified Calendar event or read a local day agenda"
         case "finder_control":
             let supported = choice(a["finder_supported"])
             used.append(supported)

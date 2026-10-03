@@ -12,6 +12,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let hotkeyState = HotkeyState()
     private var pipeline: Pipeline!
     private var panel: NotchPanel!
+    private var agendaWindow: CalendarAgendaWindow?
     private var statusItem: NSStatusItem!
     private var setupWindow: NSWindow?
     private var talkKey: HotKey?
@@ -222,9 +223,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     // MARK: pipeline events
 
-    private func handle(_ event: PipelineEvent) {
+    @MainActor private func handle(_ event: PipelineEvent) {
         Log.write(event.line.count > 300 ? String(event.line.prefix(300)) + "…" : event.line)
         switch event {
+        case let .agenda(agenda):
+            if agendaWindow == nil { agendaWindow = CalendarAgendaWindow() }
+            agendaWindow?.show(agenda)
         case let .clarification(question):
             model.status = question
             model.phase = .message
