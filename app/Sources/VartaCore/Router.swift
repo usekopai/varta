@@ -386,6 +386,15 @@ public enum Router {
             break
         }
         route(&plan, intent, used)
+        // A leading negative instruction must not be reinterpreted as its opposite action.
+        // Check the original command, never the literal payload inside a note or reminder.
+        if CommandText.isNegated(prep.transcript) {
+            plan.route = .clarify
+            plan.reason = "request begins with negation"
+            plan.action = "no action requested"
+            plan.args = [:]
+            plan.urls = []
+        }
         return plan
     }
 

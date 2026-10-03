@@ -17,14 +17,17 @@ public enum CalendarRequest: Equatable {
 public enum CalendarParsing {
     public static func parse(_ raw: String) -> CalendarRequest? {
         guard raw.count <= 1000, !raw.contains("\0") else { return nil }
-        var text = raw.trimmingCharacters(in: .whitespacesAndNewlines).trimmingCharacters(in: CharacterSet(charactersIn: ".!?"))
+        var text = CommandText.body(raw).trimmingCharacters(in: CharacterSet(charactersIn: ".!?"))
         var calendar: String?
         if let p = ReminderParsing.groups(#"^(.+?)\s+in\s+(?:my\s+|the\s+)?(.+?)\s+calendar$"#, text) {
             text = p[0]; calendar = p[1]
             guard !p[1].isEmpty, p[1].count <= 100 else { return nil }
         }
-        if let p = ReminderParsing.groups(#"^(?:what(?:'s|’s| is) on (?:my |the )?calendar|show (?:me )?(?:my |the )?(?:calendar|schedule))(?:\s+(today|tomorrow|on .+))?$"#, text) {
+        if let p = ReminderParsing.groups(#"^(?:what(?:'s|’s| is) on (?:my |the )?calendar|show (?:me )?(?:my |the )?(?:calendar|schedule))(?:\s+(?:for\s+)?(today|tomorrow|on .+))?$"#, text) {
             return .agenda(day: p[0].isEmpty ? "today" : p[0], calendar: calendar)
+        }
+        if let request = ReminderParsing.groups(#"^put\s+(.+?)\s+on\s+(?:my|the)\s+calendar(?:\s+(.+))?$"#, text) {
+            text = "schedule " + request[0] + (request[1].isEmpty ? "" : " " + request[1])
         }
         guard let p = ReminderParsing.groups(#"^(?:please\s+)?(?:schedule|add|create)\s+(.+)$"#, text) else { return nil }
         text = p[0]
@@ -153,7 +156,7 @@ public actor CalendarController {
         guard ReminderParsing.looksLikeTime(text) else { return nil }
         let answer = text.trimmingCharacters(in: .whitespacesAndNewlines).trimmingCharacters(in: CharacterSet(charactersIn: ".!?"))
         let (schedule, duration) = CalendarParsing.splitDuration(answer)
-        draft.schedule = schedule
+        draft.schedule = ReminderParsing.meridianFollowup(schedule, original: saved.draft.schedule) ?? schedule
         if let duration { draft.duration = duration }
         if let original = saved.draft.schedule {
             let hint = ReminderParsing.dayHint(original) ?? original

@@ -8,12 +8,12 @@ public struct FinderRequest: Equatable {
     public init(_ operation: String, _ target: String = "") { self.operation = operation; self.target = target }
 
     public static func parse(_ transcript: String) -> FinderRequest? {
-        let text = transcript.trimmingCharacters(in: .whitespacesAndNewlines)
+        let text = CommandText.body(transcript).trimmingCharacters(in: CharacterSet(charactersIn: "!?"))
         guard text.count <= 500 else { return nil }
         if ReminderParsing.groups(#"^(?:please\s+)?(?:show|reveal)\s+(?:this|the current)\s+file\s+in\s+Finder[.!]?$"#, text) != nil {
             return FinderRequest("current")
         }
-        if let p = ReminderParsing.groups(#"^(?:please\s+)?(?:open|show)\s+(?:my\s+|the\s+)?(downloads|documents|desktop|pictures|movies|music|home)(?:\s+folder)?(?:\s+in\s+Finder)?[.!]?$"#, text) {
+        if let p = ReminderParsing.groups(#"^(?:please\s+)?(?:open|show|take\s+me\s+to)\s+(?:my\s+|the\s+)?(downloads|documents|desktop|pictures|movies|music|home)(?:\s+folder)?(?:\s+in\s+Finder)?[.!]?$"#, text) {
             // Bare "open Music" is an application request.
             if p[0].lowercased() == "music" && !text.lowercased().contains("folder") && !text.lowercased().contains("finder") { return nil }
             return FinderRequest("folder", p[0].lowercased())

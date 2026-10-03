@@ -23,17 +23,18 @@ public struct NoteText {
     public var explicitAppend: (title: String, body: String)? {
         let patterns: [(String, Int, Int)] = [
             (#"^\s*(?:in|to)\s+(?:(?:the|my)\s+)?(.+?)\s+note(?:\s*[, :]\s*|\s+)(?:please\s+)?(?:add|append)\s+(?:(?:an?|another)\s+(?:item|line)\s+(?:called|saying)\s+)?(.+?)\s*$"#, 1, 2),
-            (#"^\s*(?:add|append)\s+(.+?)\s+to\s+(?:(?:my|the)\s+)?(.+?)\s+note[.!]?\s*$"#, 2, 1)
+            (#"^\s*(?:add|append)\s+(.+?)\s+to\s+(?:(?:my|the)\s+)?(.+?)\s+note[.!?]?\s*$"#, 2, 1)
         ]
         guard supported else { return nil }
+        let command = CommandText.body(text)
         for (pattern, titleIndex, bodyIndex) in patterns {
             let regex = try! NSRegularExpression(pattern: pattern, options: .caseInsensitive)
-            guard let match = regex.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)),
-                  let title = Range(match.range(at: titleIndex), in: text),
-                  let body = Range(match.range(at: bodyIndex), in: text) else { continue }
-            let name = String(text[title])
+            guard let match = regex.firstMatch(in: command, range: NSRange(command.startIndex..., in: command)),
+                  let title = Range(match.range(at: titleIndex), in: command),
+                  let body = Range(match.range(at: bodyIndex), in: command) else { continue }
+            let name = String(command[title])
             guard !["my", "the", "this", "that", "a", "an"].contains(NoteText.normalized(name).lowercased()) else { continue }
-            return (name, String(text[body]))
+            return (name, String(command[body]))
         }
         return nil
     }

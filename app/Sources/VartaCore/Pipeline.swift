@@ -87,7 +87,7 @@ public final class Pipeline {
         guard !stopped(cancel, emit: emit) else { return }
         emit(.plan(plan))
         if plan.route == .clarify {
-            emit(.done(ok: false, summary: "Didn't catch that"))
+            emit(.done(ok: false, summary: CommandFeedback.unsupported(plan)))
             return
         }
 
@@ -98,7 +98,7 @@ public final class Pipeline {
 
         // Low confidence, or an argument Jev couldn't resolve: with computer use off there's nothing to fall back to.
         if plan.route == .computerUse && !useComputerUse {
-            emit(.done(ok: false, summary: "Not sure what you meant. Try again"))
+            emit(.done(ok: false, summary: CommandFeedback.unsupported(plan)))
             return
         }
 
@@ -192,7 +192,7 @@ public final class Pipeline {
         }
         guard !stopped(cancel, emit: emit) else { return }
         guard useComputerUse else {
-            emit(.done(ok: false, summary: "That action isn't supported yet"))
+            emit(.done(ok: false, summary: CommandFeedback.unsupported(plan)))
             return
         }
         let agent = await computerUse(task: "The user said: \"\(plan.transcript)\". \(app) is open. Do exactly that in \(app), nothing more.",

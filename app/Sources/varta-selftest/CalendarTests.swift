@@ -53,7 +53,7 @@ import VartaCore
     let duration = await controller.followup("for an hour",cancel:CancelFlag())
     expect(duration?.result.ok == true && store.writes.last?.title == "review" && store.writes.last?.end == start.addingTimeInterval(3600), "duration follow-up retains original event and time")
     _ = await controller.perform(.create(CalendarDraft(title:"review",schedule:"tomorrow at three",duration:"30 minutes")),cancel:CancelFlag())
-    let meridian = await controller.followup("three PM",cancel:CancelFlag())
+    let meridian = await controller.followup("PM",cancel:CancelFlag())
     expect(meridian?.result.ok == true && store.writes.last?.start == start, "time follow-up retains original event day")
     _ = await controller.perform(.create(CalendarDraft(title:"review",schedule:"tomorrow",duration:"30 minutes")),cancel:CancelFlag())
     let dayOnly = await controller.followup("three PM",cancel:CancelFlag())

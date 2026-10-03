@@ -87,7 +87,7 @@ public actor ReminderController {
         guard let saved = pending else { return nil }
         pending = nil
         guard saved.expires > clock(), ReminderParsing.looksLikeTime(text), text.split(separator: " ").count <= 12 else { return nil }
-        var schedule = text
+        var schedule = ReminderParsing.meridianFollowup(text, original: saved.draft.schedule) ?? text
         if let hint = ReminderParsing.dayHint(saved.draft.schedule),
            ReminderParsing.groups(#"^(?:at\s+)?(?:[a-z]+|\d{1,2})(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)\.?$|^(?:noon|midnight)$"#, ReminderParsing.clean(text)) != nil {
             let time = text.lowercased().hasPrefix("at ") ? String(text.dropFirst(3)) : text

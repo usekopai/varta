@@ -49,7 +49,7 @@ import VartaCore
     expect(saved.ok && store.saves == 1 && store.writes.first?.due == date("tomorrow at 9 AM")?.0, "reminder saves once with resolved date")
     let question = await normal.create(ReminderDraft(title:"call mom",schedule:"tomorrow at six"),cancel:CancelFlag())
     expect(question.needsClarification && store.saves == 1, "ambiguous time saves nothing")
-    let followup = await normal.followup("six PM",cancel:CancelFlag())
+    let followup = await normal.followup("PM",cancel:CancelFlag())
     expect(followup?.ok == true && store.writes.last?.title == "call mom" && store.writes.last?.due == date("tomorrow at 6 PM")?.0, "follow-up retains task and original day")
     _ = await service.create(ReminderDraft(title:"test",schedule:"at six"),cancel:CancelFlag())
     await service.clearPending()

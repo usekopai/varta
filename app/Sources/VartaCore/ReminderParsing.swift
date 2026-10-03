@@ -28,8 +28,11 @@ public enum ReminderParsing {
     /// lose a date, list, recurrence, or location constraint.
     public static func draft(_ transcript: String) -> ReminderDraft? {
         guard transcript.utf8.count <= 16_000 else { return nil }
-        var text = clean(transcript), list: String?
-        if let parts = groups(#"^(.*?)\s+in\s+(?:my\s+|the\s+)?(.+?)\s+list[.!]?$"#, text) {
+        var text = CommandText.body(transcript), list: String?
+        if let request = groups(#"^(?:set|create|add)\s+(?:a\s+)?reminder\s+(.+)$"#, text) {
+            text = "remind me " + request[0]
+        }
+        if let parts = groups(#"^(.*?)\s+in\s+(?:my\s+|the\s+)?(.+?)\s+list[.!?]?$"#, text) {
             text = clean(parts[0]); list = clean(parts[1])
         }
         var title: String, schedule: String?
@@ -39,9 +42,10 @@ public enum ReminderParsing {
             if schedule == nil, let trailing = groups(#"^(.+?)\s+((?:today|tomorrow|in\s+[a-z0-9 -]+\s+(?:minutes?|hours?|days?)|at\s+|on\s+).*)$"#, title) {
                 title = clean(trailing[0]); schedule = clean(trailing[1])
             }
-        } else if let parts = groups(#"^(?:please\s+)?add\s+(.+?)\s+to\s+(?:my\s+|the\s+)?reminders[.!]?$"#, text) {
+        } else if let parts = groups(#"^(?:please\s+)?add\s+(.+?)\s+to\s+(?:my\s+|the\s+)?reminders[.!?]?$"#, text) {
             title = clean(parts[0])
         } else { return nil }
+        if let raw = schedule { schedule = clean(raw).trimmingCharacters(in: CharacterSet(charactersIn: ".!?")) }
         guard !title.isEmpty, title.count <= 300, !title.contains("\0"), (list?.count ?? 0) <= 100 else { return nil }
         return ReminderDraft(title: title, list: list, schedule: schedule)
     }
@@ -56,7 +60,14 @@ public enum ReminderParsing {
     }
     public static func looksLikeTime(_ text: String) -> Bool {
         let t = clean(text).lowercased()
-        return groups(#"^(today|tomorrow|on\b|in\b|at\b|no date\b|without a date\b|\d|one\b|two\b|three\b|four\b|five\b|six\b|seven\b|eight\b|nine\b|ten\b|eleven\b|twelve\b|noon\b|midnight\b).*"#, t) != nil
+        return groups(#"^(am\b|pm\b|a\.m\.|p\.m\.|today|tomorrow|on\b|in\b|at\b|no date\b|without a date\b|\d|one\b|two\b|three\b|four\b|five\b|six\b|seven\b|eight\b|nine\b|ten\b|eleven\b|twelve\b|noon\b|midnight\b).*"#, t) != nil
+    }
+    /// A bare AM/PM answer may only complete an already specified clock hour.
+    public static func meridianFollowup(_ answer: String, original: String?) -> String? {
+        let reply = clean(answer).lowercased().trimmingCharacters(in: CharacterSet(charactersIn: ".!?"))
+        guard ["am", "pm", "a.m", "p.m"].contains(reply), let original,
+              groups(#"^(?:.*\s+)?at\s+(?:[a-z]+|\d{1,2})(?::\d{2})?[.!?]?$"#, original) != nil else { return nil }
+        return original.trimmingCharacters(in: CharacterSet(charactersIn: ".!?")) + " " + reply
     }
     public static func dayHint(_ schedule: String?) -> String? {
         guard let schedule, let split = groups(#"^(.+?)\s+at\s+.+$"#, schedule) else { return nil }
@@ -64,7 +75,7 @@ public enum ReminderParsing {
     }
     public static func resolve(_ raw: String?, now: Date, calendar: Calendar) -> ReminderTime {
         guard let raw, !clean(raw).isEmpty else { return .ready(date: nil, allDay: false) }
-        let text = clean(raw).lowercased().trimmingCharacters(in: CharacterSet(charactersIn: ".!"))
+        let text = clean(raw).lowercased().trimmingCharacters(in: CharacterSet(charactersIn: ".!?"))
         if ["no date", "without a date"].contains(text) { return .ready(date: nil, allDay: false) }
         let clarify = "Say a date and time, like tomorrow at 6 PM, or say no date"
         if let relative = groups(#"^in\s+([a-z0-9 -]+)\s+(minutes?|hours?|days?)$"#, text) {
