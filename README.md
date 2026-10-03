@@ -92,6 +92,28 @@ Use `./run.sh --adhoc` to skip the reusable identity.
 
 ## What you can say
 
+### Volume and playback controls
+
+| Say | Action |
+|---|---|
+| “set volume to 30 percent” | Set system output volume and check the result |
+| “turn the volume up” / “turn the volume down” | Adjust output volume by 10 percentage points |
+| “turn volume down by 20 percent” | Subtract 20 percentage points, stopping at zero |
+| “mute audio” / “unmute audio” | Change system output mute and check the result |
+| “pause Spotify” / “resume Apple Music” | Control the named player and check its playback state |
+| “next track” / “previous track in Apple Music” | Request track navigation |
+
+We support playback controls in Spotify and Apple Music. Without a player name, we use
+the only playing player, or the only running player if neither is playing. If both are
+plausible, repeat the command with a player name. Open the player and choose content first.
+macOS may ask for Automation permission to control each player.
+
+Volume adjustments use whole percentages from 0 to 100 and preserve the current mute
+state. Some external audio devices do not allow software volume control; Varta reports
+an error if the device does not accept the change. These commands control system output,
+not microphone mute or individual app volume. Track navigation confirms dispatch; it does
+not independently verify which track was selected.
+
 ### Music
 
 | Say | Action |
@@ -142,7 +164,7 @@ Varta can decline uncertain requests and ignore speech classified as a non-comma
 Recognition and routing can still be wrong, particularly with unfamiliar names or ambiguous
 phrases. Supported examples describe intended behavior, not guaranteed outcomes.
 
-We do not yet support multi-step app tasks, system volume or brightness controls, or
+We do not yet support multi-step app tasks, brightness controls, or
 vision-based desktop automation. Commands such as “make a shopping list with eggs and milk”
 require more than the supported single menu press.
 

@@ -46,6 +46,7 @@ swift run -c release varta-cli hold 0.4 clip.wav            # simulate holding â
 | `Router.swift` | one Jev routing request â†’ typed plan; later stages can add requests; intent and argument thresholds evaluated against labelled commands |
 | `Candidates.swift`, `Fuzzy.swift`, `Sources.swift` | spans, clauses, app and site shortlists (rapidfuzz ports), installed apps, Chrome bookmarks and top sites |
 | `JSON.swift` | ordered JSON, so Jev sees options in a stable order |
+| `AudioControls.swift` | system volume and Spotify/Apple Music playback controls, with state checks |
 | `Executor.swift` | tier 1: `open`, AppleScript via argv (never a shell), Spotify direct play |
 | `Accessibility.swift` | tier 2: exact Notes new-note and Safari/Chrome zoom menu allowlist; Jev picks one, then process/menu identity and cancellation are rechecked before pressing. |
 | `ComputerUse.swift`, `MacHands.swift` | Experimental vision-based actions, **switched off** by `Features.computerUse = false`; enabling them changes permissions, providers and data flows |

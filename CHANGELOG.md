@@ -7,6 +7,9 @@ patch releases address fixes.
 
 ### Added
 
+- System volume and mute controls with state readback.
+- Spotify and Apple Music pause, resume, and track navigation, with explicit or active-player selection.
+
 - Push-to-talk voice commands in the MacBook notch, with a transcript, action plan, and result
   display. Hold the shortcut to speak or tap to toggle recording.
 - Local Whisper transcription through WhisperKit, including transcription during pauses.

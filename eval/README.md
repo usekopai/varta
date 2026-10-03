@@ -61,7 +61,8 @@ installed apps and browser profile. It does not make live Jev requests.
 
 The two whole-plan mismatches illustrate current limitations:
 
-- **"turn the volume down"** — we do not yet support a system-volume action.
+- **"turn the volume down"** — the historical response predates the system-volume action.
+  We retain it to check replay stability; it does not measure the new live routing behavior.
 - **"look up the typesafe jev docs"** — the recorded response is split between searching and
   opening a site. Varta asks for clarification; the labels expect a search, so the evaluator
   counts that result as a mismatch.

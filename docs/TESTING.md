@@ -109,3 +109,20 @@ For performance changes, include sample count, raw sanitized timings, correctnes
 network conditions, model preparation state, and the exact start/end boundary being
 measured. Keep API keys, private commands, personal app/browser inventories, and live
 user logs out of reports. Review `~/.varta/app.log` before sharing excerpts.
+
+## Audio controls
+
+The self-check executable covers bounded numeric arguments, explicit and automatic player
+selection, ambiguous players, rejected operations, subprocess errors, and cancellation
+between observation and dispatch. These tests inject subprocess responses and do not
+change audio or launch music players.
+
+For a live check, use a controllable audio output and test volume, mute, pause, resume, and
+track navigation. Test Spotify and Apple Music separately, then with both running. Verify
+that ambiguous commands request a player name and that denying Automation permission
+produces an error. Check the final state in the system sound controls or player. Restore
+your volume and playback settings afterward.
+
+Use `varta-cli route "pause Spotify"` to check live Jev routing without executing it. The
+historical 114-command fixture predates these new intents and is a regression replay,
+not evidence of current live accuracy for audio controls.

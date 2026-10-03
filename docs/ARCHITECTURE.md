@@ -57,6 +57,7 @@ All paths are under [`app/Sources/`](../app/Sources).
 | `VartaCore/Router.swift` | Builds the Jev request; turns answers into a `Plan` and picks a route |
 | `VartaCore/Jev.swift` | The TypeSafe client, one warm connection |
 | `VartaCore/JSON.swift` | JSON that keeps key order, so Jev sees options in a stable order |
+| `VartaCore/AudioControls.swift` | bounded volume changes, player selection, and playback state checks |
 | `VartaCore/Executor.swift` | The fast path: `open`, URL schemes, AppleScript |
 | `VartaCore/Accessibility.swift` | Reads allowed menu controls; Jev selects one; revalidates before pressing |
 | `VartaCore/Verify.swift` | Reads what happened and asks Jev whether it matches |
@@ -196,3 +197,20 @@ Verification currently inspects Chrome's front window even if another browser ha
 request. An unavailable verifier can still lead to an execution-success headline; it does not
 mean a semantic check passed. See [installation and troubleshooting](INSTALLATION.md) and
 [performance methodology](PERFORMANCE.md).
+
+## Audio controls
+
+We route system output volume and playback controls through explicit `audio_control` and
+`playback_control` intents. The executor validates operations, player names, and whole
+percentage values before dispatch. Relative volume defaults to 10 percentage points when
+no amount is specified; invalid amounts cannot use that default.
+
+Audio scripts read back output volume or mute state. Pause and resume check the selected
+player's state with a bounded wait. Track navigation reports dispatch only. These actions
+return their own result directly, without the general verifier's settling delay or an
+additional model request.
+
+Player selection honors an explicit Spotify or Apple Music name. Otherwise we query the
+installed players without launching them, choose a unique playing player, or choose the
+only running player when neither is playing. Ambiguity asks the user to repeat the command
+with a player name. Cancellation is checked before each observation and action subprocess.
