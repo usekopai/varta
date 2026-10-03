@@ -1,0 +1,17 @@
+# Swift
+app/.build/
+app/build/
+
+# Local runtime data: screenshots of your screen, eval plans built from your bookmarks, keys
+eval/results/
+eval/jevbench/.jevbench/
+.env
+*.log
+.DS_Store
+
+# Python CI helper caches
+__pycache__/
+*.pyc
+
+# Generated test metadata
+.pytest_cache/
