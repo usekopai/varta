@@ -19,6 +19,7 @@ guard let mode = args.first else {
     usage: varta-cli <mode> …
       questions "<command>"            print the Jev request (no network)
       route "<command>"                plan it with live Jev
+      benchmark-actions <audio-dir> <N> synthetic speech through real app/folder actions
       benchmark [--repetitions N]      public routing timings and accuracy (live API)
       run "<command>"                  plan and do it
       interpret <fixture.jsonl>        replay recorded Jev answers through the router
@@ -90,6 +91,9 @@ enum Fixture {
 }
 
 switch mode {
+case "benchmark-actions":
+    exit(await ActionBenchmark.run(arguments: Array(args.dropFirst()), client: jev))
+
 case "benchmark":
     exit(await RoutingBenchmark.run(arguments: Array(args.dropFirst()), client: jev))
 
