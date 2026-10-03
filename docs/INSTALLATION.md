@@ -36,6 +36,10 @@ in System Settings → Privacy & Security → Reminders and repeat the command. 
 list in Apple Reminders before creating tasks without an explicit list. Test this from the
 installed app; the unbundled CLI cannot request this permission.
 
+Finder filename search uses Spotlight and existing folder access. “Show this file in Finder”
+also needs Accessibility access and a saved document URL exposed by the foreground app.
+No new Finder Automation permission is required.
+
 We keep screenshot-based computer use disabled. You do not need Screen Recording permission or an Anthropic/Gateway key. Esc cancels pending work; actions already dispatched to macOS cannot be undone. See [SECURITY.md](../SECURITY.md) for data handling and action boundaries.
 
 ## Network and account requirements

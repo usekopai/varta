@@ -290,3 +290,22 @@ or uniquely named writable list, and checks cancellation before one save. It rea
 new identifier and compares title, list, due time, all-day status and alarms. Failure or
 uncertain readback never retries creation. Cancellation after a save cannot undo the task.
 The store protocol and clock are injectable for offline tests without touching personal data.
+
+
+## Finder
+
+`finder_control` retains the intent and supported-request confidence gates. A bounded
+original-transcript grammar extracts a common folder, filename search, unique reveal,
+or current-document request. Folder names map to a fixed allowlist under the user's home.
+
+`FinderController` searches with `mdfind -0 -onlyin` using an escaped filename predicate
+passed as one argument, never through a shell. It deduplicates results, checks the home
+boundary and actual filenames, excludes hidden paths and directories, and checks existence.
+Exact reveals require one match; substring searches select at most ten results in path order.
+Timeouts and cancellation prevent dispatching partial results.
+
+For “this file,” the pipeline captures the foreground window's Accessibility document URL
+before routing. Only an existing local file can be revealed. We do not infer Finder selections
+or browser downloads. NSWorkspace opens folders and asks Finder to select files. Reveal results
+report dispatch, without claiming window verification or reading file contents. Injected drivers
+and runners allow tests without opening Finder or searching personal files.

@@ -227,6 +227,35 @@ or the timeout clears the pending request. Past times and invalid or ambiguous d
 times require another time. Recurring and location-based reminders, editing or deleting tasks,
 subtasks, and calendar events are not supported. Task titles are limited to 300 characters.
 
+### Finder
+
+| Say | Action |
+|---|---|
+| “open Downloads” | Open your Downloads folder |
+| “open my Documents folder” | Open your Documents folder |
+| “find files named launch” | Find filenames containing “launch” in your home folder |
+| “show launch.pdf in Finder” | Reveal one uniquely named file, including its extension |
+| “show this file in Finder” | Reveal the foreground app's saved document, when available |
+
+We support Home, Downloads, Documents, Desktop, Pictures, Movies and Music folders.
+Say “open my Music folder” to distinguish it from the Music app.
+Search uses the local Spotlight index, excludes hidden paths and directories, and matches
+filenames without reading file contents. Finder selects up to ten matches in path order,
+potentially opening multiple windows. We report how many matches were displayed. Use a
+more specific name for a smaller result set. Exact reveal requires one case-insensitive,
+diacritic-insensitive filename match; duplicates are left for you to resolve.
+
+“This file” requires Accessibility access and an app that exposes its saved document URL.
+We capture that URL before routing. Unsaved documents, browser pages, and Finder selections
+are not inferred; name the file when no document path is available. A successful reveal
+means we asked Finder to select it, not that we verified the resulting window.
+
+Search covers indexed files under your home folder, subject to macOS access restrictions.
+Unindexed, hidden, external-drive or unavailable cloud files may not appear. Paths, wildcards,
+content search, date/type filters, moving, renaming, deleting, and opening file contents are
+not supported. Filenames and results stay local except for the filename you speak in your
+request, which follows normal transcript processing.
+
 ### Apps and menu commands
 
 | Say | Action |

@@ -192,3 +192,23 @@ In the installed app, use disposable tasks to check:
 
 Inspect results in Reminders and delete only the disposable tasks you created. Notification
 appearance is a separate check subject to macOS notification and Focus settings.
+
+
+## Finder
+
+Offline tests use disposable files, a stub Spotlight runner and an injected Finder driver.
+They cover folder allowlists, Music app ambiguity, filename extraction and predicate escaping,
+missing and duplicate targets, actual filename and home-boundary validation, cancellation,
+search failures, and capturing the current document before routing completes.
+
+In the installed app, test “open Downloads” and “open my Documents folder.” Create an indexed
+disposable file with a unique name, then say “find files named” followed by part of that name,
+and “show” followed by its complete filename and “in Finder.” Confirm Finder selects the file
+without opening its contents. With two copies of the same filename, exact reveal must decline.
+Search can open multiple Finder windows and displays at most ten matching files.
+
+Open a saved disposable document in TextEdit or Preview, then say “show this file in Finder.”
+Confirm it selects that document. Repeat with an unsaved document or a browser page; Varta
+should ask for a filename if the app exposes no existing local document URL. Also check an
+unmatched name and cancellation during a search. Spotlight exclusions and indexing delays
+can legitimately produce no results; do not interpret an empty result as proof a file is absent.

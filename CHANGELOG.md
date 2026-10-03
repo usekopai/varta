@@ -7,6 +7,8 @@ patch releases address fixes.
 
 ### Added
 
+- Finder commands for common folders, local filename searches, unique-file reveals, and supported foreground saved documents.
+
 - Apple Reminders creation with local date parsing, default or named lists, timed alarms, and readback verification.
 - Short follow-up clarification for ambiguous reminder times, with cancellation and a 90-second expiry.
 

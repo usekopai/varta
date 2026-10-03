@@ -102,3 +102,16 @@ We check cancellation before saving, make one save attempt, and verify the saved
 A save may complete before cancellation arrives; cancellation cannot undo it. If readback
 fails, we ask you to inspect Reminders before retrying to avoid duplicates. An ambiguous
 schedule stays in memory for at most 90 seconds and does not write anything until clarified.
+
+
+## Finder commands
+
+Finder commands open directories or select files; they do not open file contents or modify,
+move, rename or delete files. Filename search uses the local Spotlight index within the home
+folder. We pass the escaped predicate as a process argument, validate actual filenames and
+paths, and keep result lists local. Existing file contents are never read or sent to Jev.
+Spoken filenames and result summaries follow the normal transcript and app logging policy.
+
+Current-document reveals use the foreground app's Accessibility document URL captured before
+routing. They require an existing local file and do not fall back to an inferred selection.
+Cancellation is checked before dispatch; Finder windows already requested cannot be undone.
