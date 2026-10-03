@@ -7,6 +7,8 @@ patch releases address fixes.
 
 ### Added
 
+- Apple Notes creation with titles and dictated content, using the default destination and readback by note ID.
+
 - Chrome and Safari tab, navigation, reload, and zoom controls with explicit or foreground targeting.
 
 - System volume and mute controls with state readback.

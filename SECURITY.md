@@ -45,7 +45,9 @@ See [installation and removal](docs/INSTALLATION.md) for local-data cleanup.
   safety on unseen commands, other languages, or changed app interfaces.
 - Accessibility presses are restricted to exact English menu paths in known bundle IDs:
   Notes (`com.apple.Notes`) → File → New Note; Safari (`com.apple.Safari`) and Chrome
-  (`com.google.Chrome`) → View → Zoom In/Zoom Out. The app rechecks process identity,
+  (`com.google.Chrome`) → the documented tab, navigation, reload, and zoom menu commands.
+  Additional browser controls require an explicit browser-control plan; the open-ended
+  app-task selector retains its Notes/New Note and browser zoom scope. The app rechecks process identity,
   foreground status, menu ancestry, element identity, enabled state and press support.
   Arbitrary buttons, generic confirmations, unknown apps and localized paths are rejected.
   This assumes the local applications and macOS accessibility service are trusted; bundle
@@ -54,6 +56,10 @@ See [installation and removal](docs/INSTALLATION.md) for local-data cleanup.
   and accessibility requests and before new action dispatches; cancelled transcriptions and
   stale UI events are discarded. It does not roll back actions already dispatched to macOS,
   and an in-flight network request or subprocess may finish after cancellation.
+- Note creation passes escaped text as AppleScript arguments, writes to Notes' default
+  account/folder, and reads back only the created note by ID. Creation is never retried
+  automatically. A timeout or verification error may occur after a note was created;
+  inspect Notes before repeating the command.
 - Verification is partial. It checks supported app/browser state and sometimes asks Jev to
   judge a match. Accessibility presses are reported as unverified. A failed check does not undo
   the action, and an unavailable check is not proof of success.

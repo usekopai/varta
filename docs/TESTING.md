@@ -64,7 +64,7 @@ close any test documents afterwards without saving them if they are no longer ne
 | Case | What to check |
 |---|---|
 | Hold the configured shortcut, say “open Notes,” and release | Capture starts and stops correctly; the transcript appears; Notes opens |
-| Say “make a new note” | Notes opens and a new note is created through the supported accessibility action |
+| Say “make a new note” | Notes opens and a Quick note is created through the Notes integration |
 | Request zoom in and zoom out in Safari or Google Chrome | The supported menu action changes page zoom in the intended browser |
 | Say a non-command such as “hello there” | Varta asks for clarification rather than taking an action |
 | Request an unsupported in-app action | Varta explains the limitation without pressing an unrelated control |
@@ -140,3 +140,15 @@ while the other is foreground, then test an unnamed command with a different app
 Switch focus while a command is routing and check that no menu action runs. Use disposable
 content when checking Close Tab with an unsaved-work prompt; Varta must leave the prompt
 for you. Menu dispatch feedback alone is not evidence that navigation finished.
+
+## Notes creation
+
+Self-checks cover original-text boundaries, punctuation, oversized requests, HTML escaping,
+separate title/body fields, default titles, readback mismatches, subprocess failures, and
+cancellation after creation. Injected subprocess responses keep these tests out of real notes.
+
+For a live check, create a disposable titled note with content, then a title-only note and an
+untitled dictation. Confirm the destination matches Notes' default account and folder. Test
+quotes, ampersands, and content phrased as an instruction; it should appear as text. Denied
+Automation access must report failure. On any uncertain result, inspect Notes before repeating
+the command. Delete only the test notes you created when finished.

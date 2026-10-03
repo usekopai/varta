@@ -29,7 +29,7 @@ The first build downloads Swift dependencies. First launch downloads the default
 2. Grant Microphone access to record commands and Accessibility access for supported button/menu actions.
 3. Get a Jev API key from the [TypeSafe dashboard](https://console.typesafe.ai), following its [official quick start](https://docs.typesafe.ai/introduction/quickstart). Paste it into **TypeSafe (Jev)** and choose **Save keys**.
 4. Wait until Speech says **Ready**. Hold **⌥Space**, speak a simple command such as “open Notes,” then release. A quick tap toggles recording; tap again to submit.
-5. Accept macOS Automation prompts when a command first needs Spotify, Music or Chrome control. Only approve the applications you intend Varta to use.
+5. Accept macOS Automation prompts when a command first needs Spotify, Music, Notes or Chrome control. Only approve the applications you intend Varta to use.
 
 We keep screenshot-based computer use disabled. You do not need Screen Recording permission or an Anthropic/Gateway key. Esc cancels pending work; actions already dispatched to macOS cannot be undone. See [SECURITY.md](../SECURITY.md) for data handling and action boundaries.
 

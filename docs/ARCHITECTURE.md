@@ -235,3 +235,18 @@ The browser executor reports menu dispatch, without a second model request or a 
 page navigation completed. Menu labels must match the supported English paths. Missing,
 disabled, duplicated, or changed menu items fail rather than falling back to keystrokes or
 a broader window operation.
+
+## Notes creation
+
+The `create_note` intent selects title and body boundaries from the original transcript.
+We preserve the text between those boundaries rather than reusing the short, cleaned spans
+for search and music. Requests over 200 whitespace-delimited words or 16,000 UTF-8 bytes,
+invalid or overlapping boundaries, and titles over 200 characters cannot run automatically.
+Absent titles use Quick note; absent bodies are empty. Unsupported destinations, formatting,
+and existing-note edits cannot use this action.
+
+We escape text into a heading and body, then pass it as an AppleScript argument to Notes.
+The script creates one note in the default folder of the default account and returns its ID.
+A separate request reads that note's plaintext; comparison normalizes whitespace but preserves
+words and punctuation. We do not read other notes or automatically retry failed creation.
+Cancellation prevents subsequent dispatches but cannot remove a note already created.

@@ -170,13 +170,31 @@ we never substitute Close Window or Reopen Closed Window for a tab command. Feed
 that the menu action was requested, not that a page finished loading. Firefox and other
 browsers are not supported for these controls.
 
+### Notes with content
+
+| Say | Action |
+|---|---|
+| “create a note called Groceries with eggs, milk, and bread” | Create a titled note with the dictated body |
+| “create a note called Launch ideas” | Create a titled note |
+| “take a note: investigate the installer issue” | Save the content under **Quick note** |
+| “make a new note” | Create a note under **Quick note** |
+
+We use Apple Notes' default account and default folder. Allow macOS Automation access to
+Notes when prompted. Titles and content come from the original transcript; text is escaped
+before being passed as HTML through AppleScript arguments. We read back the created note
+by its identifier and compare its text before reporting success. Existing notes are never
+changed by this action, and uncertain creation results are not retried automatically.
+
+Keep the complete request to 200 words and titles to 200 characters. Explicit folders,
+other notes apps, appending to existing notes, attachments, and checkbox formatting are not
+yet supported. If creation or readback fails, check Notes before repeating the command.
+
 ### Apps and menu commands
 
 | Say | Action |
 |---|---|
 | “open notes” / “launch cursor” / “fire up iterm” | Open or switch to the named app |
 | “open chatgpt” | Prefer the installed app when available |
-| “make a new note” | Press Notes → File → New Note |
 | “zoom in on Safari” | Press Safari → View → Zoom In |
 
 We restrict accessibility presses to exact English menu paths: Notes' **New Note** and
@@ -191,8 +209,8 @@ Recognition and routing can still be wrong, particularly with unfamiliar names o
 phrases. Supported examples describe intended behavior, not guaranteed outcomes.
 
 We do not yet support multi-step app tasks, brightness controls, or
-vision-based desktop automation. Commands such as “make a shopping list with eggs and milk”
-require more than the supported single menu press.
+vision-based desktop automation. New plain-text notes with dictated content are supported; editing existing notes and
+creating formatted checklists are not.
 
 ## Performance
 
