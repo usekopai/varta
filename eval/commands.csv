@@ -1,0 +1,85 @@
+id,command,intent,app,song,artist,mood,kind,site,queries,engine
+m01,play blinding lights by the weeknd,play_music,,blinding lights,the weeknd,,track,,,
+m02,uh play blinding lights by the weeknd on spotify,play_music,Spotify,blinding lights,the weeknd,,track,,,
+m03,play viva la vida,play_music,,viva la vida,,,track,,,
+m04,can you play tum hi ho by arijit singh,play_music,,tum hi ho,arijit singh,,track,,,
+m05,um play some chill jazz,play_music,,,,chill jazz,mood,,,
+m06,play adele,play_music,,,adele,,artist,,,
+m07,play hello by adele,play_music,,hello,adele,,track,,,
+m08,put on some lo-fi beats to study to,play_music,,,,lo-fi beats to study to,mood,,,
+m09,i wanna hear bohemian rhapsody,play_music,,bohemian rhapsody,,,track,,,
+m10,play the album after hours by the weeknd,play_music,,after hours,the weeknd,,album,,,
+m11,play my discover weekly playlist,play_music,,discover weekly,,,playlist,,,
+m12,play starboy by the weekend,play_music,,starboy,the weekend,,track,,,
+m13,hey play something by taylor swift,play_music,,,taylor swift,,artist,,,
+m14,play workout music,play_music,,,,workout music,mood,,,
+m15,play amar shonar bangla,play_music,,amar shonar bangla,,,track,,,
+m16,play kesariya from brahmastra,play_music,,kesariya,,,track,,,
+m17,uh uh play levitating dua lipa,play_music,,levitating,dua lipa,,track,,,
+m18,play some rain sounds for sleeping,play_music,,,,rain sounds for sleeping,mood,,,
+m19,could you put on hotel california by the eagles please,play_music,,hotel california,the eagles,,track,,,
+m20,play shape of you on spotify,play_music,Spotify,shape of you,,,track,,,
+m21,play the beatles,play_music,,,the beatles,,artist,,,
+m22,play ekla cholo re,play_music,,ekla cholo re,,,track,,,
+s01,open chrome and go to hacker news,open_site,Google Chrome,,,,,news.ycombinator.com,,
+s02,go to github dot com,open_site,,,,,,github.com,,
+s03,take me to gmail,open_site,,,,,,mail.google.com,,
+s04,open youtube,open_site,,,,,,youtube.com,,
+s05,pull up reddit,open_site,,,,,,reddit.com,,
+s06,go to the verge,open_site,,,,,,theverge.com,,
+s07,open linkedin in chrome,open_site,Google Chrome,,,,,linkedin.com,,
+s08,open wikipedia,open_site,,,,,,wikipedia.org,,
+s09,open netflix,open_site,,,,,,netflix.com,,
+s10,go to amazon dot in,open_site,,,,,,amazon.in,,
+s11,um open my google drive,open_site,,,,,,drive.google.com,,
+s12,take me to stack overflow,open_site,,,,,,stackoverflow.com,,
+s13,open the new york times website,open_site,,,,,,nytimes.com,,
+s14,go to docs dot typesafe dot ai,open_site,,,,,,docs.typesafe.ai,,
+w01,search for flights to tokyo,web_search,,,,,,,flights to tokyo,google
+w02,"search for flights to tokyo, hotels in kyoto and salt and pepper shakers",web_search,,,,,,,flights to tokyo|hotels in kyoto|salt and pepper shakers,google
+w03,search tom and jerry and the weather in paris on youtube,web_search,,,,,,,tom and jerry|the weather in paris,youtube
+w04,google rock and roll history,web_search,,,,,,,rock and roll history,google
+w05,look up salt and pepper shakers and best pizza in brooklyn,web_search,,,,,,,salt and pepper shakers|best pizza in brooklyn,google
+w06,find me running shoes on amazon and also noise cancelling headphones,web_search,,,,,,,running shoes|noise cancelling headphones,amazon
+w07,open chrome and search for cheap flights to goa,web_search,Google Chrome,,,,,,cheap flights to goa,google
+w08,how tall is mount everest,web_search,,,,,,,how tall is mount everest,google
+w09,search youtube for how to make biryani,web_search,,,,,,,how to make biryani,youtube
+w10,directions to the nearest coffee shop,web_search,,,,,,,directions to the nearest coffee shop,maps
+w11,search github for rust web frameworks,web_search,,,,,,,rust web frameworks,github
+w12,look up the typesafe jev docs,web_search,,,,,,,the typesafe jev docs,google
+w13,"search for iphone 17 reviews, pixel 11 reviews and galaxy s26 reviews",web_search,,,,,,,iphone 17 reviews|pixel 11 reviews|galaxy s26 reviews,google
+w14,what's the weather in kolkata tomorrow,web_search,,,,,,,the weather in kolkata tomorrow,google
+w15,search reddit for mechanical keyboard recommendations,web_search,,,,,,,mechanical keyboard recommendations,reddit
+w16,uh google bread and butter pudding recipe,web_search,,,,,,,bread and butter pudding recipe,google
+a01,open notes,open_app,Notes,,,,,,,
+a02,launch cursor,open_app,Cursor,,,,,,,
+a03,fire up iterm,open_app,iTerm,,,,,,,
+a04,open word,open_app,Microsoft Word,,,,,,,
+a05,open excel,open_app,Microsoft Excel,,,,,,,
+a06,open telegram,open_app,Telegram,,,,,,,
+a07,open system settings,open_app,System Settings,,,,,,,
+a08,bring up the calendar,open_app,Calendar,,,,,,,
+a09,open finder,open_app,Finder,,,,,,,
+a10,start zoom,open_app,zoom.us,,,,,,,
+a11,open the calculator,open_app,Calculator,,,,,,,
+a12,open claude,open_app,Claude,,,,,,,
+a13,open chatgpt,open_app,ChatGPT,,,,,,,
+a14,um open spotify,open_app,Spotify,,,,,,,
+t01,open notes and make a shopping list with eggs and milk,app_task,Notes,,,,,,,
+t02,remind me to call mom at six,app_task,Reminders,,,,,,,
+t03,create a new keynote presentation,app_task,Keynote,,,,,,,
+t04,turn on dark mode,app_task,System Settings,,,,,,,
+t05,add a dentist appointment to my calendar tomorrow at 3 pm,app_task,Calendar,,,,,,,
+t06,open word and start a new document called trip plan,app_task,Microsoft Word,,,,,,,
+t07,message rahul on telegram that i'm running late,app_task,Telegram,,,,,,,
+t08,in notes write down the wifi password is on the fridge,app_task,Notes,,,,,,,
+t09,make a new spreadsheet in numbers,app_task,Numbers,,,,,,,
+t10,mute my zoom mic,app_task,zoom.us,,,,,,,
+n01,never mind,none,,,,,,,,
+n02,thanks that's all,none,,,,,,,,
+n03,i'm on the verge of tears,none,,,,,,,,
+n04,um,none,,,,,,,,
+n05,testing testing one two three,none,,,,,,,,
+n06,cancel,none,,,,,,,,
+n07,what was i saying,none,,,,,,,,
+n08,hello?,none,,,,,,,,

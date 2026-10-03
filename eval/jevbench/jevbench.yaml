@@ -1,0 +1,48 @@
+# Generated from the router's exact question wording. Keep in sync with app/Sources/VartaCore/Router.swift.
+# One difference from the router: jevbench's instructions are the same for every row, so the
+# per-command context (installed apps / known websites the command names) sits in `state` as text.
+name: varta-router
+model: jev-latest
+data: rows.csv
+id: id
+target: 0.95
+
+state:
+  command: "{command}"
+  installed_apps_named: "{apps_named}"
+  websites_named: "{websites_named}"
+
+questions:
+  intent:
+    type: choice
+    label: intent
+    instructions: What does the user want the computer to do in `command`? `installed_apps_named` lists applications on this Mac that the command names, and `websites_named` lists known websites it names.
+    criteria:
+      play_music: "Play music or audio: a song, album, artist, playlist, podcast, or a genre or mood of music."
+      open_site: "Open a specific website or web page by its name or address, without searching for something."
+      web_search: "Search for one or more things: information, products, places, or videos, on the web or on a named site such as YouTube or Amazon."
+      open_app: "Only open, launch, or switch to an application installed on this Mac, with no further task inside it."
+      app_task: "Do a task inside an application that is not playing music, opening a website, or searching; for example write a note, set a reminder, send a message, or change a setting."
+      none: "Not a request to operate the computer, or too unclear to act on."
+  music_kind:
+    type: choice
+    label: kind
+    instructions: What does the user want to hear in `command`?
+    criteria:
+      track: "A specific song."
+      album: "A specific album."
+      artist: "An artist's music in general, with no particular song or album."
+      playlist: "A named playlist."
+      mood: "A genre, mood, or activity rather than a named song, album, artist, or playlist, such as chill jazz or workout music."
+  search_engine:
+    type: choice
+    label: engine
+    instructions: Where does `command` ask for the search to happen?
+    criteria:
+      google: "Google web search, or no particular site is named for the search."
+      youtube: "Search on YouTube, or the user wants videos."
+      amazon: "Search for products on Amazon."
+      maps: "Search for a place, address, or directions on a map."
+      wikipedia: "Search on Wikipedia."
+      github: "Search on GitHub."
+      reddit: "Search on Reddit."

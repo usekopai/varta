@@ -1,0 +1,31 @@
+id,command,intent,app,song,artist,mood,kind,site,queries,engine
+hm01,play numb by linkin park,play_music,,numb,linkin park,,track,,,
+hm02,uh can you put on kun faya kun,play_music,,kun faya kun,,,track,,,
+hm03,play some focus music,play_music,,,,focus music,mood,,,
+hm04,play drake,play_music,,,drake,,artist,,,
+hm05,i want to listen to tomake chai by gangor,play_music,,tomake chai,gangor,,track,,,
+hm06,play the album random access memories,play_music,,random access memories,,,album,,,
+hm07,play something relaxing,play_music,,,,something relaxing;relaxing,mood,,,
+hm08,play perfect by ed sheeran on spotify,play_music,Spotify,perfect,ed sheeran,,track,,,
+hs01,open instagram,open_site,,,,,,instagram.com,,
+hs02,go to techcrunch,open_site,,,,,,techcrunch.com,,
+hs03,take me to google calendar,open_site,,,,,,calendar.google.com,,
+hs04,open x dot com,open_site,,,,,,x.com,,
+hs05,go to the bbc website,open_site,,,,,,bbc.com,,
+hs06,pull up airbnb,open_site,,,,,,airbnb.com,,
+hw01,search for best laptops under 1000 dollars,web_search,,,,,,,best laptops under 1000 dollars,google
+hw02,look up the population of japan and the capital of peru,web_search,,,,,,,the population of japan|the capital of peru,google
+hw03,search amazon for usb c cables,web_search,,,,,,,usb c cables,amazon
+hw04,find videos of cats and dogs playing on youtube,web_search,,,,,,,cats and dogs playing;videos of cats and dogs playing,youtube
+hw05,who won the world cup in 2022,web_search,,,,,,,who won the world cup in 2022,google
+hw06,google pros and cons of solar panels,web_search,,,,,,,pros and cons of solar panels,google
+ha01,open pages,open_app,Pages,,,,,,,
+ha02,launch docker,open_app,Docker,,,,,,,
+ha03,open powerpoint,open_app,Microsoft PowerPoint,,,,,,,
+ha04,um open notion,open_app,Notion,,,,,,,
+ha05,open messages,open_app,Messages,,,,,,,
+ht01,write a note saying buy groceries,app_task,Notes,,,,,,,
+ht02,set a timer for ten minutes,app_task,Clock,,,,,,,
+ht03,turn the volume down,app_task,System Settings,,,,,,,
+hn01,oh sorry i wasn't talking to you,none,,,,,,,,
+hn02,hmm let me think,none,,,,,,,,

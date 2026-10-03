@@ -1,0 +1,85 @@
+id,command,apps_named,websites_named,intent,kind,engine
+m01,play blinding lights by the weeknd,none,none,play_music,track,
+m02,play blinding lights by the weeknd on spotify,Spotify,"Spotify Web Player, Spotify, Spotify – Pakistani Hip-Hop, Barkat - song by Rozeo | Spotify",play_music,track,
+m03,play viva la vida,none,none,play_music,track,
+m04,can you play tum hi ho by arijit singh,none,none,play_music,track,
+m05,play some chill jazz,none,none,play_music,mood,
+m06,play adele,none,none,play_music,artist,
+m07,play hello by adele,none,none,play_music,track,
+m08,put on some lo-fi beats to study to,none,none,play_music,mood,
+m09,i wanna hear bohemian rhapsody,none,none,play_music,track,
+m10,play the album after hours by the weeknd,none,none,play_music,album,
+m11,play my discover weekly playlist,none,none,play_music,playlist,
+m12,play starboy by the weekend,none,none,play_music,track,
+m13,hey play something by taylor swift,none,none,play_music,artist,
+m14,play workout music,Music,none,play_music,mood,
+m15,play amar shonar bangla,none,none,play_music,track,
+m16,play kesariya from brahmastra,none,none,play_music,track,
+m17,play levitating dua lipa,none,none,play_music,track,
+m18,play some rain sounds for sleeping,none,none,play_music,mood,
+m19,could you put on hotel california by the eagles please,none,none,play_music,track,
+m20,play shape of you on spotify,Spotify,"Spotify Web Player, Spotify, The Shape of AI, Spotify – Pakistani Hip-Hop, Barkat - song by Rozeo | Spotify",play_music,track,
+m21,play the beatles,none,none,play_music,artist,
+m22,play ekla cholo re,none,none,play_music,track,
+s01,open chrome and go to hacker news,"Google Chrome, News",Hacker News,open_site,,
+s02,go to github dot com,none,"GitHub, github.com, Mimikatz Github, ATT&CK® Navigator, MITRE Data Collection Scripts",open_site,,
+s03,take me to gmail,Mail,"Gmail, Gmail",open_site,,
+s04,open youtube,none,"YouTube, YouTube, (275) CS6035 - Man in the Middle - Flag6 Demo - YouTube, (410) Python Django Web Framework - Full Course for Beginners - YouTube, (281) CS 6035 - ML in Cybersecurity [EC] Project Introduction - YouTube",open_site,,
+s05,pull up reddit,none,Reddit,open_site,,
+s06,go to the verge,none,The Verge,open_site,,
+s07,open linkedin in chrome,Google Chrome,"LinkedIn, [Fully Updated] Google Professional Cloud Developer Dumps (PDF) - Ensure Your Success With Professional Cloud Developer Exam Questions | LinkedIn",open_site,,
+s08,open wikipedia,none,"Wikipedia, Red team - Wikipedia, Blue team (computer security) - Wikipedia",open_site,,
+s09,open netflix,none,"Netflix, Home - Netflix",open_site,,
+s10,go to amazon dot in,none,"Amazon, Amazon India, AWS DeepRacer - the fastest way to get rolling with machine learning, Buy Kiddale Educational Activity Cube Toy for 2-4 Years Old Kid- 6 in 1, with Blocks, Piano, Clock, Mirror, Music and Light Learning -Multicolor Online at Low Prices in India - Amazon.in",open_site,,
+s11,open my google drive,none,"Gmail, Google, Google Docs, Google Maps, Google Drive",open_site,,
+s12,take me to stack overflow,none,"Stack Overflow, node.js - How to send push notifications in Flutter android app? - Stack Overflow",open_site,,
+s13,open the new york times website,none,The New York Times,open_site,,
+s14,go to docs dot typesafe dot ai,none,TypeSafe docs,open_site,,
+w01,search for flights to tokyo,none,none,web_search,,google
+w02,search for flights to tokyo hotels in kyoto and salt and pepper shakers,none,none,web_search,,google
+w03,search tom and jerry and the weather in paris on youtube,Weather,"YouTube, Weather, YouTube, (275) CS6035 - Man in the Middle - Flag6 Demo - YouTube, (410) Python Django Web Framework - Full Course for Beginners - YouTube",web_search,,youtube
+w04,google rock and roll history,none,"Gmail, Google, Google Docs, Google Maps, Google Drive",web_search,,google
+w05,look up salt and pepper shakers and best pizza in brooklyn,none,none,web_search,,google
+w06,find me running shoes on amazon and also noise cancelling headphones,none,"Amazon, Amazon India, AWS DeepRacer - the fastest way to get rolling with machine learning, Buy Kiddale Educational Activity Cube Toy for 2-4 Years Old Kid- 6 in 1, with Blocks, Piano, Clock, Mirror, Music and Light Learning -Multicolor Online at Low Prices in India - Amazon.in",web_search,,amazon
+w07,open chrome and search for cheap flights to goa,Google Chrome,none,web_search,,google
+w08,how tall is mount everest,none,none,web_search,,google
+w09,search youtube for how to make biryani,none,"YouTube, YouTube, (275) CS6035 - Man in the Middle - Flag6 Demo - YouTube, (410) Python Django Web Framework - Full Course for Beginners - YouTube, (281) CS 6035 - ML in Cybersecurity [EC] Project Introduction - YouTube",web_search,,youtube
+w10,directions to the nearest coffee shop,none,none,web_search,,maps
+w11,search github for rust web frameworks,none,"GitHub, github.com, Mimikatz Github, ATT&CK® Navigator, MITRE Data Collection Scripts",web_search,,github
+w12,look up the typesafe jev docs,none,TypeSafe docs,web_search,,google
+w13,search for iphone 17 reviews pixel 11 reviews and galaxy s26 reviews,Phone,none,web_search,,google
+w14,what's the weather in kolkata tomorrow,Weather,Weather,web_search,,google
+w15,search reddit for mechanical keyboard recommendations,none,Reddit,web_search,,reddit
+w16,google bread and butter pudding recipe,none,"Gmail, Google, Google Docs, Google Maps, Google Drive",web_search,,google
+a01,open notes,Notes,none,open_app,,
+a02,launch cursor,Cursor,none,open_app,,
+a03,fire up iterm,iTerm,none,open_app,,
+a04,open word,Microsoft Word,none,open_app,,
+a05,open excel,Microsoft Excel,none,open_app,,
+a06,open telegram,Telegram,none,open_app,,
+a07,open system settings,System Settings,none,open_app,,
+a08,bring up the calendar,Calendar,none,open_app,,
+a09,open finder,Finder,none,open_app,,
+a10,start zoom,none,none,open_app,,
+a11,open the calculator,Calculator,none,open_app,,
+a12,open claude,Claude,"Claude, New chat - Claude",open_app,,
+a13,open chatgpt,ChatGPT,ChatGPT,open_app,,
+a14,open spotify,Spotify,"Spotify Web Player, Spotify, Spotify – Pakistani Hip-Hop, Barkat - song by Rozeo | Spotify",open_app,,
+t01,open notes and make a shopping list with eggs and milk,Notes,none,app_task,,
+t02,remind me to call mom at six,none,none,app_task,,
+t03,create a new keynote presentation,Keynote,none,app_task,,
+t04,turn on dark mode,none,none,app_task,,
+t05,add a dentist appointment to my calendar tomorrow at 3 pm,Calendar,none,app_task,,
+t06,open word and start a new document called trip plan,Microsoft Word,none,app_task,,
+t07,message rahul on telegram that i'm running late,"Telegram, Messages",none,app_task,,
+t08,in notes write down the wifi password is on the fridge,"Notes, Passwords",none,app_task,,
+t09,make a new spreadsheet in numbers,Numbers,none,app_task,,
+t10,mute my zoom mic,none,none,app_task,,
+n01,never mind,none,none,none,,
+n02,thanks that's all,none,none,none,,
+n03,i'm on the verge of tears,none,The Verge,none,,
+n04,,none,none,none,,
+n05,testing testing one two three,none,none,none,,
+n06,cancel,none,none,none,,
+n07,what was i saying,none,none,none,,
+n08,hello,none,none,none,,
