@@ -271,3 +271,22 @@ No retry occurs after an uncertain write, and cancellation cannot undo a dispatc
 Existing content is not included in Jev requests or subprocess command/error logs. The process
 runner drains both output pipes concurrently so larger readbacks cannot fill a pipe and block
 the child before it exits.
+
+
+## Reminders
+
+The `create_reminder` intent uses Jev for intent and supported-request classification, retaining
+our confidence gates. `ReminderParsing` extracts the task, optional list and schedule from a
+bounded original-transcript grammar. Dates resolve locally against a Gregorian calendar and
+the current time zone; unsupported or ambiguous schedules cannot silently become undated tasks.
+
+`ReminderController` holds an unresolved task for 90 seconds. A short temporal follow-up
+continues it without another Jev call. Esc, expiry or an unrelated command clears it.
+The pipeline emits a clarification event to keep the prompt visible. Date-only tasks have
+no explicit alarm; timed tasks get one absolute alarm at the resolved due time.
+
+The main-actor EventKit adapter requests Reminders access on first use, selects the default
+or uniquely named writable list, and checks cancellation before one save. It reads back the
+new identifier and compares title, list, due time, all-day status and alarms. Failure or
+uncertain readback never retries creation. Cancellation after a save cannot undo the task.
+The store protocol and clock are injectable for offline tests without touching personal data.

@@ -31,6 +31,11 @@ The first build downloads Swift dependencies. First launch downloads the default
 4. Wait until Speech says **Ready**. Hold **⌥Space**, speak a simple command such as “open Notes,” then release. A quick tap toggles recording; tap again to submit.
 5. Accept macOS Automation prompts when a command first needs Spotify, Music, Notes or Chrome control. Only approve the applications you intend Varta to use.
 
+For your first reminder, allow the separate **Reminders** permission. If denied, enable Varta
+in System Settings → Privacy & Security → Reminders and repeat the command. Set a default
+list in Apple Reminders before creating tasks without an explicit list. Test this from the
+installed app; the unbundled CLI cannot request this permission.
+
 We keep screenshot-based computer use disabled. You do not need Screen Recording permission or an Anthropic/Gateway key. Esc cancels pending work; actions already dispatched to macOS cannot be undone. See [SECURITY.md](../SECURITY.md) for data handling and action boundaries.
 
 ## Network and account requirements

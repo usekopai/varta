@@ -7,6 +7,9 @@ patch releases address fixes.
 
 ### Added
 
+- Apple Reminders creation with local date parsing, default or named lists, timed alarms, and readback verification.
+- Short follow-up clarification for ambiguous reminder times, with cancellation and a 90-second expiry.
+
 - Append dictated text as a new line to one existing simple Apple Notes note, with unique-title lookup and content verification.
 
 - Apple Notes creation with titles and dictated content, using the default destination and readback by note ID.

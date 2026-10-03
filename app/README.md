@@ -47,6 +47,7 @@ swift run -c release varta-cli hold 0.4 clip.wav            # simulate holding â
 | `Candidates.swift`, `Fuzzy.swift`, `Sources.swift` | spans, clauses, app and site shortlists (rapidfuzz ports), installed apps, Chrome bookmarks and top sites |
 | `JSON.swift` | ordered JSON, so Jev sees options in a stable order |
 | `BrowserControls.swift` | Chrome/Safari menu operations, foreground capture, target validation, and cancellation |
+| `ReminderParsing.swift`, `Reminders.swift` | local date parsing, pending clarification, EventKit creation and readback |
 | `Notes.swift` | original-transcript extraction, creation, unique-title append, and content readback |
 | `AudioControls.swift` | system volume and Spotify/Apple Music playback controls, with state checks |
 | `Executor.swift` | tier 1: `open`, AppleScript via argv (never a shell), Spotify direct play |

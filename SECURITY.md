@@ -88,3 +88,17 @@ creates exposure; upstream fixes may also be necessary.
 
 A source build being self-signed rather than notarized, and the documented need for macOS
 permissions, are expected properties rather than vulnerabilities by themselves.
+
+
+## Reminders access
+
+Apple's EventKit API requires full Reminders access to create tasks. We request it on first
+use through the installed app's usage description. We read list metadata to choose the
+requested destination, then read back only the newly created reminder by identifier. Existing
+reminder contents are not sent to Jev. Your spoken request follows the transcript handling
+and logging described above.
+
+We check cancellation before saving, make one save attempt, and verify the saved fields.
+A save may complete before cancellation arrives; cancellation cannot undo it. If readback
+fails, we ask you to inspect Reminders before retrying to avoid duplicates. An ambiguous
+schedule stays in memory for at most 90 seconds and does not write anything until clarified.

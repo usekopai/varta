@@ -200,6 +200,33 @@ Keep the complete request to 200 words and titles to 200 characters. Explicit fo
 other notes apps, replacing/deleting existing text, attachments, and checkbox formatting are not
 yet supported. If creation or readback fails, check Notes before repeating the command.
 
+### Reminders
+
+| Say | Action |
+|---|---|
+| “remind me tomorrow at 9 AM to review the release” | Create a task with a due time and alarm |
+| “remind me in twenty minutes to check the build” | Create a task due after that duration |
+| “add buy milk to my reminders” | Create a task without a due date |
+| “remind me tomorrow to buy milk in my Shopping list” | Create an all-day task in an existing named list |
+
+Allow **Reminders** access when macOS prompts on first use. We use your default list
+unless you name one; named lists must have one exact, case-insensitive match and be writable.
+We save through Apple's EventKit API and read back the new reminder before reporting success.
+If verification fails, check Reminders before repeating the command; we never retry a write automatically.
+
+Dates use your Mac's local time zone. Supported schedules include today, tomorrow, full
+English month dates such as “on October 10 2027 at 9 AM,” ISO dates, and relative minutes,
+hours or days. Use AM/PM, noon, midnight, or a numeric 24-hour time with a colon.
+A date without a time creates an all-day task without an explicit alarm; an undated task
+has neither a due date nor an alarm. Notification delivery also depends on macOS settings.
+
+For an ambiguous time such as “tomorrow at six,” we ask for clarification and save nothing.
+Use the shortcut again and say “six PM” within 90 seconds; we keep the task and original day.
+You can also supply a complete date and time or say “no date.” Esc, an unrelated command,
+or the timeout clears the pending request. Past times and invalid or ambiguous daylight-saving
+times require another time. Recurring and location-based reminders, editing or deleting tasks,
+subtasks, and calendar events are not supported. Task titles are limited to 300 characters.
+
 ### Apps and menu commands
 
 | Say | Action |

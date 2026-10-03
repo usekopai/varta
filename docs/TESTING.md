@@ -166,3 +166,29 @@ remains and the new line appears once. Repeat with duplicate titles and a note c
 an attachment or checklist; neither should be edited. Make manual edits while a command is
 routing to test the changed-content guard. Do not repeat an uncertain append until you have
 checked the note for an already completed addition.
+
+
+## Reminders
+
+Offline tests use an injected store and clock. They cover spoken and numeric times, local
+calendar dates, daylight-saving gaps and repeated hours, past/invalid dates, follow-up context
+and expiry, denied access, cancellation during permission requests, list selection failures,
+and uncertain saves without retries. Pipeline tests confirm a temporal follow-up bypasses
+routing and creates the task once. These tests do not establish real EventKit behavior.
+
+In the installed app, use disposable tasks to check:
+
+1. “Remind me in twenty minutes to check the test build.” Grant Reminders access on first use;
+   confirm one task in the default list with the expected due time and alarm.
+2. “Add Varta test milk to my reminders.” Confirm no due date or alarm.
+3. “Remind me tomorrow to check Varta in my Shopping list,” using a list you already have.
+   Confirm the named destination and an all-day due date. Try a nonexistent list; nothing saves.
+4. “Remind me tomorrow at six to review the Varta test.” Confirm nothing saves yet; use the
+   shortcut again and say “six PM.” Confirm one task tomorrow at 18:00 with the original title.
+5. Repeat the ambiguous request, press Esc, then say “six PM.” Confirm no task is created.
+   Repeat with a wait longer than 90 seconds and with an unrelated command in between.
+6. Deny access in System Settings → Privacy & Security → Reminders; confirm a clear recovery
+   message. Re-enable access and retry. Check Reminders before retrying any uncertain save.
+
+Inspect results in Reminders and delete only the disposable tasks you created. Notification
+appearance is a separate check subject to macOS notification and Focus settings.
