@@ -62,6 +62,7 @@ expect(prep.questions.contains { $0.0 == "search_split_2" } && !prep.questions.c
 for (_, q) in prep.questions { expect((q["criteria"]?.object?.count ?? 0) <= 255, "choice option limit") }
 
 await audioControlTests()
+await browserControlTests()
 
 let pipelineFailures = await PipelineSelfTests.run()
 expect(pipelineFailures.isEmpty, "pipeline cancellation and replacement regressions: \(pipelineFailures.joined(separator: "; "))")

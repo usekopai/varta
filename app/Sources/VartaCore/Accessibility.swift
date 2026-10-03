@@ -25,7 +25,7 @@ public enum AXTier {
         case "com.apple.Notes":
             return menuPath == ["File", "New Note"]
         case "com.apple.Safari", "com.google.Chrome":
-            return menuPath == ["View", "Zoom In"] || menuPath == ["View", "Zoom Out"]
+            return BrowserAction.allCases.contains { $0.menuPath(bundleID: bundleID) == menuPath }
         default:
             return false
         }
@@ -59,14 +59,14 @@ public enum AXTier {
         NSWorkspace.shared.runningApplications.first { $0.localizedName == app }?.processIdentifier
     }
 
-    public static func controls(app: String) -> [AXControl] {
+    public static func controls(app: String, includeBrowserControls: Bool = false) -> [AXControl] {
         guard let running = NSWorkspace.shared.runningApplications.first(where: { $0.localizedName == app }) else { return [] }
-        return controls(in: running)
+        return controls(in: running, includeBrowserControls: includeBrowserControls)
     }
 
     /// Read only direct leaf menu commands from the actual process's menu bar. A window
     /// button titled "File › New Note" cannot enter this list.
-    static func controls(in running: NSRunningApplication) -> [AXControl] {
+    static func controls(in running: NSRunningApplication, includeBrowserControls: Bool = false) -> [AXControl] {
         guard !running.isTerminated, let bundleID = running.bundleIdentifier,
               ["com.apple.Notes", "com.apple.Safari", "com.google.Chrome"].contains(bundleID) else { return [] }
         let pid = running.processIdentifier
@@ -84,6 +84,10 @@ public enum AXTier {
                 for item in children(menu) {
                     guard let itemTitle = attr(item, kAXTitleAttribute) as? String else { continue }
                     let path = [title, itemTitle]
+                    // The open-ended app-task selector retains its original narrow scope.
+                    // Additional browser operations require an explicit browser_control plan.
+                    if !includeBrowserControls, bundleID != "com.apple.Notes",
+                       path != ["View", "Zoom In"], path != ["View", "Zoom Out"] { continue }
                     guard isAllowed(bundleID: bundleID, menuPath: path,
                                     role: string(item, kAXRoleAttribute) ?? "",
                                     enabled: (attr(item, kAXEnabledAttribute) as? Bool) == true,
@@ -186,7 +190,7 @@ public enum AXTier {
               NSWorkspace.shared.frontmostApplication?.processIdentifier == control.processID,
               // Re-read the menu hierarchy after the network calls. Reject stale/replaced
               // elements, changed paths, disabled commands and controls from another process.
-              controls(in: running).contains(where: {
+              controls(in: running, includeBrowserControls: true).contains(where: {
                   $0.menuPath == control.menuPath && CFEqual($0.element, control.element)
               }),
               belongs(control.element, to: control.processID),

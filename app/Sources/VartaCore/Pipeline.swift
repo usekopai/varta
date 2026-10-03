@@ -52,6 +52,7 @@ public final class Pipeline {
 
     public func run(_ text: String, cancel: CancelFlag = CancelFlag(), emit: @escaping (PipelineEvent) -> Void) async {
         guard !stopped(cancel, emit: emit) else { return }
+        let browserOrigin = executor.browserController.captureForeground()
         emit(.thinking(text))
         let plan: Plan
         do {
@@ -81,7 +82,7 @@ public final class Pipeline {
         }
 
         guard !stopped(cancel, emit: emit) else { return }
-        let res = executor.execute(plan, cancel: cancel)
+        let res = executor.execute(plan, cancel: cancel, browserOrigin: browserOrigin)
         guard !stopped(cancel, emit: emit) else { return }
         emit(.ran(res))
         // Albums, playlists and catalogue searches need a click that only computer use could make.
@@ -94,7 +95,7 @@ public final class Pipeline {
             agent = await computerUse(task: res.handoff + " Stop as soon as it is playing.", apps: ["Spotify"], cancel: cancel, emit: emit)
         }
 
-        if ["audio_control", "playback_control"].contains(plan.intent) {
+        if ["audio_control", "playback_control", "browser_control"].contains(plan.intent) {
             emit(.done(ok: res.ok, summary: res.note))
             return
         }

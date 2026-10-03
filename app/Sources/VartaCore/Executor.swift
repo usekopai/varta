@@ -59,10 +59,12 @@ public final class Executor {
     /// Spotify's top *track* is right for these; albums and playlists need their own play button.
     static let directPlayKinds: Set<String> = ["track", "artist", "mood"]
 
+    let browserController: BrowserController
     let runner: Runner
     let apps: Set<String>
 
-    public init(runner: Runner = SystemRunner(), apps: [String] = MacSources.installedApps) {
+    public init(runner: Runner = SystemRunner(), apps: [String] = MacSources.installedApps, browserController: BrowserController = BrowserController()) {
+        self.browserController = browserController
         self.runner = runner
         self.apps = Set(apps)
     }
@@ -105,13 +107,15 @@ public final class Executor {
         return apps.contains(Executor.preferredBrowser) ? Executor.preferredBrowser : nil
     }
 
-    public func execute(_ plan: Plan, cancel: CancelFlag? = nil) -> ExecResult {
+    public func execute(_ plan: Plan, cancel: CancelFlag? = nil, browserOrigin: BrowserTarget? = nil) -> ExecResult {
         let t0 = Date()
         var res = ExecResult()
         guard !stopped(&res, cancel) else { return res }
         switch plan.route {
         case .fastpath, .fastpathThenCheck:
             switch plan.intent {
+            case "browser_control":
+                res = browserController.execute(operation: plan.arg("operation"), browser: plan.arg("browser"), origin: browserOrigin, cancel: cancel ?? CancelFlag())
             case "audio_control": controlAudio(plan, &res, cancel: cancel)
             case "playback_control": controlPlayback(plan, &res, cancel: cancel)
             case "open_app": exec(&res, ["open", "-a", plan.arg("app") ?? ""], cancel: cancel)

@@ -13,6 +13,7 @@ public enum Router {
     static let searchYes = 0.50
 
     public static let intents: [(String, String)] = [
+        ("browser_control", "One browser control in Chrome or Safari: next or previous tab, new tab, close current tab, reopen last closed tab, back, forward, reload, zoom in or out. Not opening a website, searching, closing multiple tabs, or tasks inside a page."),
         ("audio_control", "Control Mac system output volume: set a percentage, increase, decrease, mute or unmute. Not microphone mute or volume inside a named app."),
         ("playback_control", "Pause, resume, skip to the next track or return to the previous track in Spotify or Apple Music. Not a request to find new music or control another app."),
         ("play_music", "Play music or audio: a song, album, artist, playlist, podcast, or a genre or mood of music."),
@@ -108,6 +109,10 @@ public enum Router {
                                      Array((domains + spanOpts).prefix(250)), "The command names no website.")),
             ("search_engine", choiceQ("Where does `command` ask for the search to happen?", engines.map { ($0.0, .string($0.1)) })),
         ]
+        q.append(("browser_action", choiceQ("Which ONE browser operation completely fulfills the request? Choose none for multiple steps, multiple tabs, a specific named or numbered tab, a website to open, or extra details not handled by the operation.",
+            BrowserAction.allCases.map { ($0.rawValue, .string($0.description)) } + [(Candidates.none, "No single supported operation completes the request.")])))
+        q.append(("control_browser", choiceQ("Which browser is explicitly named? Do not infer a browser. Generic browser or no app name means foreground. Any other named app is unsupported.",
+            [("Google Chrome", "Chrome or Google Chrome."), ("Safari", "Safari."), ("foreground", "No specific browser or application named."), ("unsupported", "Another browser or application named.")].map { ($0.0, .string($0.1)) })))
         q.append(("audio_action", choiceQ("Which system output-volume operation is requested? Microphone mute and per-app volume are unsupported.",
             [("set", "Set an absolute output volume."), ("increase", "Increase output volume."), ("decrease", "Decrease output volume."), ("mute", "Mute system output."), ("unmute", "Unmute system output."), (Candidates.none, "No supported operation.")].map { ($0.0, .string($0.1)) })))
         q.append(("audio_amount", choiceQ("What integer percentage from 0 to 100 is explicitly requested, either as an absolute volume or the amount to increase/decrease? Choose default only if no amount is specified for a relative increase/decrease. Choose none if outside this range, fractional, unclear, or missing for an absolute setting. Never invent an amount.",
@@ -177,6 +182,16 @@ public enum Router {
 
         var used: [Arg] = []
         switch plan.intent {
+        case "browser_control":
+            let action = choice(a["browser_action"])
+            let browser = choice(a["control_browser"])
+            plan.args["operation"] = action
+            plan.args["browser"] = browser
+            used += [action, browser]
+            if BrowserAction(rawValue: action.text ?? "") == nil || !["foreground", "Google Chrome", "Safari"].contains(browser.text ?? "") {
+                used.append(Arg(.none, 0))
+            }
+            plan.action = "browser control: \(action.text ?? "unknown")"
         case "audio_control":
             let action = choice(a["audio_action"])
             let amount = choice(a["audio_amount"])
