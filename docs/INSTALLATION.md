@@ -36,6 +36,12 @@ in System Settings → Privacy & Security → Reminders and repeat the command. 
 list in Apple Reminders before creating tasks without an explicit list. Test this from the
 installed app; the unbundled CLI cannot request this permission.
 
+Calendar commands request separate **full Calendar access** on first use, including for
+creation because we verify the saved event. If denied or limited to adding events, enable
+full access under System Settings → Privacy & Security → Calendars, then repeat the command.
+Set a default calendar in Apple Calendar or name an existing writable calendar. Use the
+installed app for the permission prompt and agenda window.
+
 Finder filename search uses Spotlight and existing folder access. “Show this file in Finder”
 also needs Accessibility access and a saved document URL exposed by the foreground app.
 No new Finder Automation permission is required.

@@ -115,3 +115,18 @@ Spoken filenames and result summaries follow the normal transcript and app loggi
 Current-document reveals use the foreground app's Accessibility document URL captured before
 routing. They require an existing local file and do not fall back to an inferred selection.
 Cancellation is checked before dispatch; Finder windows already requested cannot be undone.
+
+
+## Calendar access
+
+Calendar commands request full EventKit access so we can verify new events and read a day
+agenda. We create a single nonrecurring timed event without setting attendees, invitations,
+locations, notes or explicit alarms. We require a writable default or uniquely named calendar
+and check cancellation before saving. A completed save cannot be undone by cancellation;
+uncertain saves require inspection in Calendar before retrying.
+
+Agenda queries read one requested day from accessible calendars, optionally restricted to a
+named calendar. Results appear locally in a Varta window. Existing event details are omitted
+from pipeline logs and are never sent to Jev; normal handling still applies to the request
+you dictate and the confirmation for an event you create. Agenda display does not execute
+instructions embedded in event titles. Pending clarification lives in memory for 90 seconds.

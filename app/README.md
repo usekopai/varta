@@ -47,6 +47,7 @@ swift run -c release varta-cli hold 0.4 clip.wav            # simulate holding â
 | `Candidates.swift`, `Fuzzy.swift`, `Sources.swift` | spans, clauses, app and site shortlists (rapidfuzz ports), installed apps, Chrome bookmarks and top sites |
 | `JSON.swift` | ordered JSON, so Jev sees options in a stable order |
 | `BrowserControls.swift` | Chrome/Safari menu operations, foreground capture, target validation, and cancellation |
+| `CalendarCommands.swift`, `CalendarAgendaWindow.swift` | timed event creation, clarification, local agenda queries and display |
 | `FinderControls.swift` | common folders, local filename search, unique reveals, and saved-document context |
 | `ReminderParsing.swift`, `Reminders.swift` | local date parsing, pending clarification, EventKit creation and readback |
 | `Notes.swift` | original-transcript extraction, creation, unique-title append, and content readback |

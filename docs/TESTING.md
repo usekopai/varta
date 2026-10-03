@@ -212,3 +212,31 @@ Confirm it selects that document. Repeat with an unsaved document or a browser p
 should ask for a filename if the app exposes no existing local document URL. Also check an
 unmatched name and cancellation during a search. Spotlight exclusions and indexing delays
 can legitimately produce no results; do not interpret an empty result as proof a file is absent.
+
+
+## Calendar
+
+Offline tests use an injected EventKit adapter and clock. They cover request extraction,
+duration bounds, missing time/duration and follow-up retention, expiry, cancellation, denied
+access, missing/duplicate/read-only calendars, uncertain saves without retries, sorted agenda
+overlap, privacy of agenda log lines, and a 25-hour daylight-saving day. The pipeline test
+checks that a duration answer creates once without another routing request. Real EventKit
+permission prompts, saves and agenda rendering still require installed-app testing.
+
+1. Say “schedule a Varta test tomorrow at 3 PM for 30 minutes.” Grant full Calendar access.
+   Check one event in the default calendar with the expected title, start and end.
+2. Say “schedule Varta follow-up test tomorrow at 3 PM,” then answer “one hour.” Confirm
+   nothing saves before the answer and the final event is one hour long.
+3. Say “schedule Varta time test tomorrow at three for 30 minutes,” then “three PM.” Confirm
+   the day is retained. Repeat with Esc or a wait over 90 seconds; a later answer must not save.
+4. Repeat with “in my Work calendar,” using an existing calendar. Try a missing or duplicate
+   name and a read-only calendar; no event should be created.
+5. Ask “what’s on my calendar tomorrow?” Check times and calendar names against Calendar,
+   including all-day or overnight events. Scroll the result window and resize it. Test an
+   empty day; if there are more than 50 events, confirm the displayed limit and total.
+6. Deny Calendar access and verify a recovery message. Re-enable full access and retry.
+   Requests to invite attendees, repeat, modify or delete events must not perform those actions.
+
+Use disposable events and remove only those you created. Check Calendar before retrying any
+uncertain save. Notification delivery and scheduling-conflict detection are not verified by
+creation success; Varta does not add explicit alerts or check conflicts.

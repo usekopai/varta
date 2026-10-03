@@ -227,6 +227,39 @@ or the timeout clears the pending request. Past times and invalid or ambiguous d
 times require another time. Recurring and location-based reminders, editing or deleting tasks,
 subtasks, and calendar events are not supported. Task titles are limited to 300 characters.
 
+### Calendar
+
+| Say | Action |
+|---|---|
+| “schedule a launch review tomorrow at 3 PM for 30 minutes” | Create one timed event |
+| “add a dentist appointment on October 12 at 10 AM for an hour” | Create an event on a named date |
+| “schedule review tomorrow at 3 PM for one hour in my Work calendar” | Use one existing named calendar |
+| “what’s on my calendar tomorrow?” | Show a local agenda window |
+| “show my calendar today in my Work calendar” | Show that calendar's events for today |
+
+Allow **full Calendar access** on first use. We create events in your default calendar unless
+you name one. Named calendars need one exact, case-insensitive match; creation also requires
+write access. We save once and read back the new event's title, calendar, start and end before
+reporting success. If verification fails, check Calendar before repeating the command.
+
+Creation requires a title, explicit day, start time and duration. Use today, tomorrow, or
+“on” followed by a full English month date or ISO date. Dates without a year use the current
+year; past dates are declined. Times use your Mac's local time zone. Use AM/PM, noon, midnight,
+or a numeric 24-hour time with a colon. Durations support whole minutes or hours, including
+“half an hour,” from one minute to 24 hours. We do not choose a duration for you.
+
+If the date, time or duration is missing or ambiguous, use the shortcut again to answer the
+question within 90 seconds. For example, follow “schedule review tomorrow at 3 PM” with
+“30 minutes.” A time-only answer such as “three PM” preserves an already specified day.
+Esc, an unrelated command or expiry discards the pending event. Nothing is saved until the
+required details are resolved. Event creation does not check for scheduling conflicts.
+
+Agenda queries cover today, tomorrow, or one future date and include overlapping and all-day
+events across accessible calendars unless you name one. The scrollable window shows up to
+50 events in start-time order and reports the total. Existing event details stay local and
+are omitted from app logs and Jev requests. We do not create all-day or recurring events,
+invite attendees, add locations or alerts, or edit/delete existing events in this version.
+
 ### Finder
 
 | Say | Action |

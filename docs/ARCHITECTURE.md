@@ -309,3 +309,27 @@ before routing. Only an existing local file can be revealed. We do not infer Fin
 or browser downloads. NSWorkspace opens folders and asks Finder to select files. Reveal results
 report dispatch, without claiming window verification or reading file contents. Injected drivers
 and runners allow tests without opening Finder or searching personal files.
+
+
+## Calendar
+
+`calendar_control` uses the existing intent and argument confidence gates plus a supported
+request classification. `CalendarParsing` extracts a bounded event or day-agenda request from
+the original transcript. Event dates reuse local calendar parsing with invalid, past and
+ambiguous daylight-saving times declined. Creation requires a timed start and a whole-minute
+duration; no default length or all-day event is inferred.
+
+`CalendarController` retains missing details for 90 seconds. Temporal and duration answers
+continue locally without another Jev request. A resolved start is retained while asking for
+duration. Esc clears both Calendar and Reminders pending state; unrelated commands replace
+pending work. The main-actor EventKit adapter requests full Calendar access, resolves the
+calendar, saves once, and reads back that event's identifier and fields. Writes are never
+retried automatically after an uncertain outcome.
+
+Agenda queries compute local start-of-day and the next calendar day, rather than adding
+24 hours. They include overlapping events and exclude cancelled events. Without a named
+calendar, all accessible calendars are queried. The controller sorts results and returns at
+most 50 entries with the total count. A dedicated pipeline event presents a scrollable native
+SwiftUI window; its log representation contains only the count. Existing titles, dates and
+calendar names do not enter Jev context or persisted agenda files. Injected stores and clocks
+exercise these paths without touching personal events.

@@ -7,6 +7,9 @@ patch releases address fixes.
 
 ### Added
 
+- Calendar event creation with date/time and duration clarification, named calendars, and saved-field verification.
+- A local day agenda window with event times, calendar names, and up to 50 entries.
+
 - Finder commands for common folders, local filename searches, unique-file reveals, and supported foreground saved documents.
 
 - Apple Reminders creation with local date parsing, default or named lists, timed alarms, and readback verification.
