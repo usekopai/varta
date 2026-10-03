@@ -1,0 +1,58 @@
+name: Prepare source release
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag, for example v0.1.0
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - name: Validate requested tag
+        id: version
+        env:
+          REQUESTED_TAG: ${{ inputs.tag || github.ref_name }}
+        shell: bash
+        run: |
+          if [[ ! "$REQUESTED_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Use a version tag such as v0.1.0"
+            exit 1
+          fi
+          echo "tag=$REQUESTED_TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${REQUESTED_TAG#v}" >> "$GITHUB_OUTPUT"
+      - name: Check out the exact release tag
+        uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ steps.version.outputs.tag }}
+          persist-credentials: false
+      - name: Check versions and extract notes
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: python3 .github/scripts/release-notes.py
+      - name: Build release configuration
+        run: swift build -c release --package-path app
+      - name: Self-tests
+        run: swift run --skip-build -c release --package-path app varta-selftest
+      - name: Recorded router and accuracy gates (no API key)
+        run: python3 .github/scripts/check-eval.py --configuration release
+      - name: Create draft source prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release create "$RELEASE_TAG" --verify-tag --draft --prerelease \
+            --title "Varta $RELEASE_VERSION" --notes-file "$RUNNER_TEMP/varta-release-notes.md"

@@ -1,0 +1,15 @@
+name: Command or feature request
+description: Suggest a command or improvement
+body:
+  - type: textarea
+    id: command
+    attributes:
+      label: What would you say, and what should happen?
+      description: Include a few phrasings and describe the exact expected result.
+    validations:
+      required: true
+  - type: textarea
+    id: limits
+    attributes:
+      label: Requirements and possible confusion
+      description: Which apps are involved? What similar phrases must behave differently?

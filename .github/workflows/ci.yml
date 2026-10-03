@@ -1,0 +1,30 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show toolchain
+        run: swift --version
+      - name: Build
+        run: swift build --package-path app
+      - name: Self-tests
+        run: swift run --skip-build --package-path app varta-selftest
+      - name: Recorded router and accuracy gates (no API key)
+        run: python3 .github/scripts/check-eval.py
+      - name: Installer syntax
+        run: zsh -n run.sh

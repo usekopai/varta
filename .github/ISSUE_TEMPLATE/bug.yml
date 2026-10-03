@@ -1,0 +1,22 @@
+name: Bug report
+description: Report setup, recognition, routing or action problems
+body:
+  - type: textarea
+    id: behavior
+    attributes:
+      label: What happened?
+      description: Include what you said, what you expected, what happened, and steps to reproduce.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Varta version, Mac model and macOS version
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Relevant diagnostics (optional)
+      description: Paste only the relevant excerpt. Remove keys, transcripts, private URLs, page titles and control labels you do not want public. Never attach your credentials or entire .varta directory.
+      render: text

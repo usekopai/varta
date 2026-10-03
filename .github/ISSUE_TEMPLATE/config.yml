@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/usekopai/varta/discussions
+    about: Ask about usage or discuss a proposed contribution.
+  - name: Private vulnerability report
+    url: https://github.com/usekopai/varta/security/advisories/new
+    about: Use private reporting for security vulnerabilities, not public issues.
