@@ -214,3 +214,24 @@ Player selection honors an explicit Spotify or Apple Music name. Otherwise we qu
 installed players without launching them, choose a unique playing player, or choose the
 only running player when neither is playing. Ambiguity asks the user to repeat the command
 with a player name. Cancellation is checked before each observation and action subprocess.
+
+## Browser controls
+
+We route ten single browser operations through `browser_control`. Jev selects an enumerated
+operation and an explicit Chrome/Safari target or the foreground browser. Multi-action
+requests, named tabs, window commands, and unsupported browsers cannot use this executor.
+
+The pipeline captures the foreground browser before routing. The controller checks the
+bundle ID, process ID, launch date, and foreground identity before dispatch. Explicit
+browser names may activate an already running browser; unnamed controls cannot switch
+applications. The native driver selects one exact allowlisted menu leaf and uses AXTier's
+identity and enabled-state revalidation before pressing. Cancellation is checked around
+activation and before pressing. Modal windows and attached sheets are left untouched.
+
+The additional browser menu operations are exposed only to the explicit browser controller;
+the open-ended app-task selector retains its original Notes and zoom scope.
+
+The browser executor reports menu dispatch, without a second model request or a claim that
+page navigation completed. Menu labels must match the supported English paths. Missing,
+disabled, duplicated, or changed menu items fail rather than falling back to keystrokes or
+a broader window operation.

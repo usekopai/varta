@@ -144,6 +144,32 @@ Apple Music playback searches your local library.
 We support Google, YouTube, Amazon, Maps, Wikipedia, GitHub, and Reddit searches.
 Known sites come from a built-in list and your Chrome bookmarks and top sites.
 
+### Browser controls
+
+We support these controls in Chrome and Safari:
+
+| Say | Action |
+|---|---|
+| “next tab” / “previous tab” | Select the adjacent tab |
+| “new tab in Chrome” | Open a new tab in Chrome |
+| “close this tab” | Request the browser's Close Tab command |
+| “reopen the last closed tab in Safari” | Request Safari's last closed tab |
+| “go back” / “go forward” | Navigate page history |
+| “reload this page” | Reload the current page |
+| “zoom in” / “zoom out” | Adjust page zoom one step |
+
+Name Chrome or Safari to bring that running browser forward. Without a name, we use the
+browser that was foreground when routing started and stop if focus changes before dispatch.
+If neither browser was foreground, repeat the command with a browser name. The browser
+must already be running.
+
+Enable Varta in **System Settings → Privacy & Security → Accessibility**. We use exact
+English menu commands and report when a command is disabled or unavailable. Dialogs remain
+for you to handle. Closing the final tab may close its window according to browser behavior;
+we never substitute Close Window or Reopen Closed Window for a tab command. Feedback confirms
+that the menu action was requested, not that a page finished loading. Firefox and other
+browsers are not supported for these controls.
+
 ### Apps and menu commands
 
 | Say | Action |
@@ -153,8 +179,8 @@ Known sites come from a built-in list and your Chrome bookmarks and top sites.
 | “make a new note” | Press Notes → File → New Note |
 | “zoom in on Safari” | Press Safari → View → Zoom In |
 
-We restrict accessibility presses to exact English menu paths: Notes' **New Note**, and
-Safari/Chrome's **Zoom In** and **Zoom Out**. Varta rechecks the foreground app and menu item
+We restrict accessibility presses to exact English menu paths: Notes' **New Note** and
+the Chrome/Safari controls listed above. Varta rechecks the foreground app and menu item
 before pressing. Other apps, arbitrary buttons, confirmation dialogs, and localized menu paths
 are unsupported.
 

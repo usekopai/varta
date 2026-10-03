@@ -126,3 +126,17 @@ your volume and playback settings afterward.
 Use `varta-cli route "pause Spotify"` to check live Jev routing without executing it. The
 historical 114-command fixture predates these new intents and is a regression replay,
 not evidence of current live accuracy for audio controls.
+
+## Browser controls
+
+Offline checks use an injected browser driver to cover all ten operations in both browsers,
+explicit targeting, absent targets, focus changes during routing, restarted processes,
+cancellation during activation, unavailable menu commands, and unsupported requests. They
+also assert that window and bulk-tab commands are excluded from the menu allowlist.
+
+For a live check, give Varta Accessibility access and create disposable tabs in Chrome and
+Safari. Test next/previous, new/close/reopen, back/forward/reload, and zoom. Name each browser
+while the other is foreground, then test an unnamed command with a different app in front.
+Switch focus while a command is routing and check that no menu action runs. Use disposable
+content when checking Close Tab with an unsaved-work prompt; Varta must leave the prompt
+for you. Menu dispatch feedback alone is not evidence that navigation finished.
