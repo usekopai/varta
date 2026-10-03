@@ -1,0 +1,163 @@
+{
+  "date": "2026-10-03",
+  "model": "openai_whisper-large-v3-v20240930_turbo",
+  "releaseDelaySeconds": 0.4,
+  "recordingSource": {
+    "source": "macOS say",
+    "voice": "Samantha",
+    "rate_words_per_minute": 175,
+    "commands": [
+      "open Notes",
+      "go to hacker news",
+      "search for weather in Paris",
+      "play Hello by Adele",
+      "never mind"
+    ],
+    "note": "Synthetic audio, not microphone or human-speech accuracy evidence"
+  },
+  "environment": {
+    "chip": "Apple M4 Pro",
+    "memoryGiB": 24,
+    "macOS": "26.5.1",
+    "build": "release"
+  },
+  "samples": [
+    {
+      "releaseToTranscriptMs": 1103,
+      "source": "live pass (waited)",
+      "audioFile": "01.aiff",
+      "expected": "open Notes",
+      "transcript": "Open Notes",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1200,
+      "source": "live pass (waited)",
+      "audioFile": "02.aiff",
+      "expected": "go to hacker news",
+      "transcript": "Go to Hacker News",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1123,
+      "source": "live pass (waited)",
+      "audioFile": "03.aiff",
+      "expected": "search for weather in Paris",
+      "transcript": "Search for weather in Paris",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1275,
+      "source": "live pass (waited)",
+      "audioFile": "04.aiff",
+      "expected": "play Hello by Adele",
+      "transcript": "Play Hello by Adele",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1251,
+      "source": "live pass (waited)",
+      "audioFile": "05.aiff",
+      "expected": "never mind",
+      "transcript": "Nevermind",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1037,
+      "source": "live pass (waited)",
+      "audioFile": "01.aiff",
+      "expected": "open Notes",
+      "transcript": "Open Notes",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1197,
+      "source": "live pass (waited)",
+      "audioFile": "02.aiff",
+      "expected": "go to hacker news",
+      "transcript": "Go to Hacker News",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1130,
+      "source": "live pass (waited)",
+      "audioFile": "03.aiff",
+      "expected": "search for weather in Paris",
+      "transcript": "Search for weather in Paris",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1274,
+      "source": "live pass (waited)",
+      "audioFile": "04.aiff",
+      "expected": "play Hello by Adele",
+      "transcript": "Play Hello by Adele",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1238,
+      "source": "live pass (waited)",
+      "audioFile": "05.aiff",
+      "expected": "never mind",
+      "transcript": "Nevermind",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1052,
+      "source": "live pass (waited)",
+      "audioFile": "01.aiff",
+      "expected": "open Notes",
+      "transcript": "Open Notes",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1183,
+      "source": "live pass (waited)",
+      "audioFile": "02.aiff",
+      "expected": "go to hacker news",
+      "transcript": "Go to Hacker News",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1139,
+      "source": "live pass (waited)",
+      "audioFile": "03.aiff",
+      "expected": "search for weather in Paris",
+      "transcript": "Search for weather in Paris",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1237,
+      "source": "live pass (waited)",
+      "audioFile": "04.aiff",
+      "expected": "play Hello by Adele",
+      "transcript": "Play Hello by Adele",
+      "matchesIgnoringCaseAndWhitespace": true
+    },
+    {
+      "releaseToTranscriptMs": 1249,
+      "source": "live pass (waited)",
+      "audioFile": "05.aiff",
+      "expected": "never mind",
+      "transcript": "Nevermind",
+      "matchesIgnoringCaseAndWhitespace": true
+    }
+  ],
+  "p50Ms": 1197,
+  "p95Ms": 1275,
+  "audioSHA256": {
+    "01.aiff": "c076f089c5043e1a1d6c08d0c7e8170c92c4ff5d78a5820cb361ef6ee4dc05a3",
+    "02.aiff": "62d97390c16967e75616b767e3d857395325e85fa8b3570e53d982d4e7ee4126",
+    "03.aiff": "6126597376bedf614e98dd019307b04d033a885b16b80815a672b2b978fa145c",
+    "04.aiff": "e38100f576bc79d7adcc87f39345a16f915447d3df718cdc156e4c0f9d53a27c",
+    "05.aiff": "1660f55aeb82680c073c8ee056378fe36c29756ea221b36e1bd4d7a52e1e756a"
+  },
+  "limitations": [
+    "Synthetic voice, not microphone recordings or human accuracy evidence.",
+    "Prepared model repeated run; cold preparation excluded from per-sample metrics.",
+    "0.4 seconds of silence added after clip before simulated release.",
+    "Speech stage only; no routing or actions included.",
+    "Initial preparation run overlapped clean source build; reported repeat began after builds completed.",
+    "Varta app remained open with its speech model ready."
+  ]
+}
