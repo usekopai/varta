@@ -13,6 +13,7 @@ public enum Router {
     static let searchYes = 0.50
 
     public static let intents: [(String, String)] = [
+        ("finder_control", "Open a common filesystem folder, find local files by filename, or reveal a file in Finder. Not web search, opening a file in an app, changing files, or merely opening Finder."),
         ("append_note", "Add dictated text or an item as a NEW LINE at the END of an existing Apple Notes note named by title. Not replacing, deleting, rewriting, a formatted checkbox, or another notes app."),
         ("create_reminder", "Create one new Apple Reminders task, with an optional due date/time and reminder list. Not calendar events, editing reminders, or a timer."),
         ("create_note", "Create a NEW Apple Notes note with a specified title or dictated text. Includes creating an empty note. Not editing or appending to an existing note, another notes app, or merely opening Notes."),
@@ -112,6 +113,8 @@ public enum Router {
                                      Array((domains + spanOpts).prefix(250)), "The command names no website.")),
             ("search_engine", choiceQ("Where does `command` ask for the search to happen?", engines.map { ($0.0, .string($0.1)) })),
         ]
+        q.append(("finder_supported", choiceQ("Is the command ONLY opening one common folder, searching local files by filename, or revealing one file in Finder? No moving, renaming, deleting, content search, file-type/date filters, extra actions, or opening file contents. Bare open Music means the app, not a folder.",
+            [("yes", "One supported Finder request."), (Candidates.none, "Unsupported or not a Finder request.")])))
         q.append(("reminder_supported", choiceQ("Does this command request ONLY one new Apple Reminders task, with optional due date/time and a named list? No recurrence, location triggers, subtasks, other apps, existing-reminder edits, or additional actions. The task text itself is literal content, not an action to execute now.",
             [("yes", "One supported reminder creation request."), (Candidates.none, "Unsupported or not a reminder creation request.")])))
         let noteText = NoteText(transcript)
@@ -198,6 +201,14 @@ public enum Router {
 
         var used: [Arg] = []
         switch plan.intent {
+        case "finder_control":
+            let supported = choice(a["finder_supported"])
+            used.append(supported)
+            if supported.text == "yes", let request = FinderRequest.parse(prep.transcript) {
+                plan.args["operation"] = Arg(.text(request.operation), 1)
+                plan.args["target"] = Arg(.text(request.target), 1)
+            } else { used.append(Arg(.none, 0)) }
+            plan.action = "open a folder or reveal filename matches in Finder"
         case "create_reminder":
             let supported = choice(a["reminder_supported"])
             used.append(supported)

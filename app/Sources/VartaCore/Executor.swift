@@ -76,11 +76,13 @@ public final class Executor {
     /// Spotify's top *track* is right for these; albums and playlists need their own play button.
     static let directPlayKinds: Set<String> = ["track", "artist", "mood"]
 
+    let finderController: FinderController
     let browserController: BrowserController
     let runner: Runner
     let apps: Set<String>
 
-    public init(runner: Runner = SystemRunner(), apps: [String] = MacSources.installedApps, browserController: BrowserController = BrowserController()) {
+    public init(runner: Runner = SystemRunner(), apps: [String] = MacSources.installedApps, browserController: BrowserController = BrowserController(), finderController: FinderController = FinderController()) {
+        self.finderController = finderController
         self.browserController = browserController
         self.runner = runner
         self.apps = Set(apps)
@@ -124,13 +126,15 @@ public final class Executor {
         return apps.contains(Executor.preferredBrowser) ? Executor.preferredBrowser : nil
     }
 
-    public func execute(_ plan: Plan, cancel: CancelFlag? = nil, browserOrigin: BrowserTarget? = nil) -> ExecResult {
+    public func execute(_ plan: Plan, cancel: CancelFlag? = nil, browserOrigin: BrowserTarget? = nil, finderDocument: URL? = nil) -> ExecResult {
         let t0 = Date()
         var res = ExecResult()
         guard !stopped(&res, cancel) else { return res }
         switch plan.route {
         case .fastpath, .fastpathThenCheck:
             switch plan.intent {
+            case "finder_control":
+                return finderController.execute(FinderRequest(plan.arg("operation") ?? "", plan.arg("target") ?? ""), document: finderDocument, cancel: cancel ?? CancelFlag())
             case "append_note": appendNote(plan, &res, cancel: cancel)
             case "create_note": createNote(plan, &res, cancel: cancel)
             case "browser_control":
