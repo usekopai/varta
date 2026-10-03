@@ -5,6 +5,7 @@ import Foundation
 ///   route (Jev) -> fast path -> accessibility press or computer use (if needed) -> check -> one retry
 public enum PipelineEvent {
     case thinking(String)
+    case clarification(String)
     case plan(Plan)
     case ran(ExecResult)
     case axPress(label: String, ok: Bool)
@@ -18,6 +19,7 @@ public enum PipelineEvent {
 
     public var line: String {
         switch self {
+        case let .clarification(t): return "clarify   \(t)"
         case let .thinking(t): return "heard     \(t)"
         case let .plan(p): return "plan      \(p.json)"
         case let .ran(r): return "ran       \(r.ok ? "✓" : "✗") \(r.ran.joined(separator: " ; ")) \(r.note)"
@@ -37,23 +39,32 @@ public final class Pipeline {
     let jev: Jev
     let executor: Executor
     let runner: Runner
+    let reminders: ReminderController
     let route: (String) async throws -> Plan
     public var useComputerUse = Features.computerUse
     public var check = true
     static let runsDir = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".varta/runs")
 
     public init(jev: Jev, executor: Executor = Executor(), runner: Runner = SystemRunner(),
-                route: ((String) async throws -> Plan)? = nil) {
+                route: ((String) async throws -> Plan)? = nil, reminders: ReminderController = ReminderController()) {
+        self.reminders = reminders
         self.jev = jev
         self.executor = executor
         self.runner = runner
         self.route = route ?? { try await Router.route(jev: jev, transcript: $0) }
     }
 
+    public func clearPendingReminder() async { await reminders.clearPending() }
+
     public func run(_ text: String, cancel: CancelFlag = CancelFlag(), emit: @escaping (PipelineEvent) -> Void) async {
         guard !stopped(cancel, emit: emit) else { return }
         let browserOrigin = executor.browserController.captureForeground()
         emit(.thinking(text))
+        if let continued = await reminders.followup(text, cancel: cancel) {
+            guard !stopped(cancel, emit: emit) else { return }
+            emit(continued.needsClarification ? .clarification(continued.note) : .done(ok: continued.ok, summary: continued.note))
+            return
+        }
         let plan: Plan
         do {
             plan = try await route(text)
@@ -82,6 +93,12 @@ public final class Pipeline {
         }
 
         guard !stopped(cancel, emit: emit) else { return }
+        if plan.intent == "create_reminder", plan.route == .fastpath, let title = plan.arg("title") {
+            let res = await reminders.create(ReminderDraft(title: title, list: plan.arg("list"), schedule: plan.arg("schedule")), cancel: cancel)
+            guard !stopped(cancel, emit: emit) else { return }
+            emit(res.needsClarification ? .clarification(res.note) : .done(ok: res.ok, summary: res.note))
+            return
+        }
         let res = executor.execute(plan, cancel: cancel, browserOrigin: browserOrigin)
         guard !stopped(cancel, emit: emit) else { return }
         emit(.ran(res))

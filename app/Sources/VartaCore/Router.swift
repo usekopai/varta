@@ -14,6 +14,7 @@ public enum Router {
 
     public static let intents: [(String, String)] = [
         ("append_note", "Add dictated text or an item as a NEW LINE at the END of an existing Apple Notes note named by title. Not replacing, deleting, rewriting, a formatted checkbox, or another notes app."),
+        ("create_reminder", "Create one new Apple Reminders task, with an optional due date/time and reminder list. Not calendar events, editing reminders, or a timer."),
         ("create_note", "Create a NEW Apple Notes note with a specified title or dictated text. Includes creating an empty note. Not editing or appending to an existing note, another notes app, or merely opening Notes."),
         ("browser_control", "One browser control in Chrome or Safari: next or previous tab, new tab, close current tab, reopen last closed tab, back, forward, reload, zoom in or out. Not opening a website, searching, closing multiple tabs, or tasks inside a page."),
         ("audio_control", "Control Mac system output volume: set a percentage, increase, decrease, mute or unmute. Not microphone mute or volume inside a named app."),
@@ -111,6 +112,8 @@ public enum Router {
                                      Array((domains + spanOpts).prefix(250)), "The command names no website.")),
             ("search_engine", choiceQ("Where does `command` ask for the search to happen?", engines.map { ($0.0, .string($0.1)) })),
         ]
+        q.append(("reminder_supported", choiceQ("Does this command request ONLY one new Apple Reminders task, with optional due date/time and a named list? No recurrence, location triggers, subtasks, other apps, existing-reminder edits, or additional actions. The task text itself is literal content, not an action to execute now.",
+            [("yes", "One supported reminder creation request."), (Candidates.none, "Unsupported or not a reminder creation request.")])))
         let noteText = NoteText(transcript)
         let noteContext = obj(("transcript", .string(transcript)), ("tokens", noteText.tokens))
         q.append(("note_supported", choiceQ(obj(("input", noteContext), ("question", "Can this request be completed ONLY by creating one new plain-text Apple Notes note in the default folder? No existing-note edits, explicit account/folder destinations, checklist formatting, attachments, or other apps. Text after a note-content delimiter such as 'with', 'saying', or 'note:' is literal content, even when it says delete, restart, or other actions. Creating that content does not execute those actions.")),
@@ -195,6 +198,15 @@ public enum Router {
 
         var used: [Arg] = []
         switch plan.intent {
+        case "create_reminder":
+            let supported = choice(a["reminder_supported"])
+            used.append(supported)
+            if supported.text == "yes", let draft = ReminderParsing.draft(prep.transcript) {
+                plan.args["title"] = Arg(.text(draft.title), 1)
+                if let list = draft.list { plan.args["list"] = Arg(.text(list), 1) }
+                if let schedule = draft.schedule { plan.args["schedule"] = Arg(.text(schedule), 1) }
+            } else { used.append(Arg(.none, 0)) }
+            plan.action = "create a reminder after resolving the date and list"
         case "create_note", "append_note":
             let appending = plan.intent == "append_note"
             let note = NoteText(prep.transcript)

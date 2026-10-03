@@ -20,6 +20,8 @@
     <string>15.0</string>
     <key>LSUIElement</key>
     <true/>
+    <key>NSRemindersFullAccessUsageDescription</key>
+    <string>Varta creates reminders you dictate and checks that they were saved correctly.</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Varta listens while you hold ⌥Space so you can speak a command.</string>
     <key>NSAppleEventsUsageDescription</key>

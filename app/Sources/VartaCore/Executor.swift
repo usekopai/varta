@@ -62,6 +62,7 @@ public struct ExecResult {
     public var ok = true
     public var ran: [String] = []
     public var note = ""
+    public var needsClarification = false
     /// What computer use still has to do, if anything.
     public var handoff = ""
     public var ms = 0.0

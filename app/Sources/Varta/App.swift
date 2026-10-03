@@ -212,6 +212,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         escKey = HotKey(keyCode: Keys.escape, modifiers: 0) { [weak self] pressed in
             guard pressed, let self else { return }
             self.cancel.cancel()
+            Task { await self.pipeline?.clearPendingReminder() }
             self.releasePoll?.invalidate()
             self.toggleMode = false
             self.listener.cancel()
@@ -224,6 +225,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func handle(_ event: PipelineEvent) {
         Log.write(event.line.count > 300 ? String(event.line.prefix(300)) + "…" : event.line)
         switch event {
+        case let .clarification(question):
+            model.status = question
+            model.phase = .message
+            collapse(after: 90)
         case .thinking:
             break
         case let .plan(plan):

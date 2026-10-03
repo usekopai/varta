@@ -65,6 +65,7 @@ await audioControlTests()
 await browserControlTests()
 noteTests()
 appendNoteTests()
+await reminderTests()
 
 let pipelineFailures = await PipelineSelfTests.run()
 expect(pipelineFailures.isEmpty, "pipeline cancellation and replacement regressions: \(pipelineFailures.joined(separator: "; "))")
