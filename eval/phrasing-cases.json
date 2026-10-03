@@ -1,0 +1,262 @@
+[
+  {
+    "id": "p01",
+    "command": "Could you open my Downloads folder?",
+    "intent": "finder_control",
+    "args": {
+      "operation": "folder",
+      "target": "downloads"
+    }
+  },
+  {
+    "id": "p02",
+    "command": "Take me to my Documents folder",
+    "intent": "finder_control",
+    "args": {
+      "operation": "folder",
+      "target": "documents"
+    }
+  },
+  {
+    "id": "p03",
+    "command": "Please find files named launch",
+    "intent": "finder_control",
+    "args": {
+      "operation": "search",
+      "target": "launch"
+    }
+  },
+  {
+    "id": "p04",
+    "command": "Can you show launch.pdf in Finder?",
+    "intent": "finder_control",
+    "args": {
+      "operation": "reveal",
+      "target": "launch.pdf"
+    }
+  },
+  {
+    "id": "p05",
+    "command": "Could you remind me to check the build in twenty minutes?",
+    "intent": "create_reminder",
+    "args": {
+      "title": "check the build",
+      "schedule": "in twenty minutes"
+    }
+  },
+  {
+    "id": "p06",
+    "command": "Set a reminder to call mom tomorrow at 9 AM",
+    "intent": "create_reminder",
+    "args": {
+      "title": "call mom",
+      "schedule": "tomorrow at 9 AM"
+    }
+  },
+  {
+    "id": "p07",
+    "command": "Remind me tomorrow at nine AM to call mom",
+    "intent": "create_reminder",
+    "args": {
+      "title": "call mom",
+      "schedule": "tomorrow at nine AM"
+    }
+  },
+  {
+    "id": "p08",
+    "command": "Add buy milk to my reminders",
+    "intent": "create_reminder",
+    "args": {
+      "title": "buy milk"
+    }
+  },
+  {
+    "id": "p09",
+    "command": "Could you schedule review tomorrow at 3 PM for 30 minutes?",
+    "intent": "calendar_control",
+    "args": {
+      "title": "review",
+      "schedule": "tomorrow at 3 PM",
+      "duration": "30 minutes"
+    }
+  },
+  {
+    "id": "p10",
+    "command": "Put review on my calendar tomorrow at 3 PM for half an hour",
+    "intent": "calendar_control",
+    "args": {
+      "title": "review",
+      "schedule": "tomorrow at 3 PM",
+      "duration": "half an hour"
+    }
+  },
+  {
+    "id": "p11",
+    "command": "What's on my calendar for tomorrow?",
+    "intent": "calendar_control",
+    "args": {
+      "operation": "agenda",
+      "day": "tomorrow"
+    }
+  },
+  {
+    "id": "p12",
+    "command": "Show me my schedule tomorrow",
+    "intent": "calendar_control",
+    "args": {
+      "operation": "agenda",
+      "day": "tomorrow"
+    }
+  },
+  {
+    "id": "p13",
+    "command": "Could you add eggs to the Groceries note?",
+    "intent": "append_note",
+    "args": {
+      "title": "Groceries",
+      "body": "eggs"
+    }
+  },
+  {
+    "id": "p14",
+    "command": "Please append test the installer to my Launch Ideas note",
+    "intent": "append_note",
+    "args": {
+      "title": "Launch Ideas",
+      "body": "test the installer"
+    }
+  },
+  {
+    "id": "p15",
+    "command": "Create a note called Launch Ideas with test the installer",
+    "intent": "create_note",
+    "args": {
+      "title": "Launch Ideas",
+      "body": "test the installer"
+    }
+  },
+  {
+    "id": "p16",
+    "command": "Can you switch to the next tab in Chrome?",
+    "intent": "browser_control",
+    "args": {
+      "operation": "next_tab",
+      "browser": "Google Chrome"
+    }
+  },
+  {
+    "id": "p17",
+    "command": "Go back in Safari",
+    "intent": "browser_control",
+    "args": {
+      "operation": "back",
+      "browser": "Safari"
+    }
+  },
+  {
+    "id": "p18",
+    "command": "Reopen the tab I just closed in Chrome",
+    "intent": "browser_control",
+    "args": {
+      "operation": "reopen_tab",
+      "browser": "Google Chrome"
+    }
+  },
+  {
+    "id": "p19",
+    "command": "Could you turn the sound off?",
+    "intent": "audio_control",
+    "args": {
+      "operation": "mute"
+    }
+  },
+  {
+    "id": "p20",
+    "command": "Set the volume to thirty percent",
+    "intent": "audio_control",
+    "args": {
+      "operation": "set",
+      "amount": 30
+    }
+  },
+  {
+    "id": "p21",
+    "command": "Please pause Spotify",
+    "intent": "playback_control",
+    "args": {
+      "operation": "pause",
+      "player": "Spotify"
+    }
+  },
+  {
+    "id": "p22",
+    "command": "Skip this song in Apple Music",
+    "intent": "playback_control",
+    "args": {
+      "operation": "next",
+      "player": "Music"
+    }
+  },
+  {
+    "id": "p23",
+    "command": "Could you open Calculator?",
+    "intent": "open_app",
+    "args": {
+      "app": "Calculator"
+    }
+  },
+  {
+    "id": "p24",
+    "command": "Search YouTube for Swift tutorials",
+    "intent": "web_search",
+    "args": {}
+  },
+  {
+    "id": "p25",
+    "command": "Delete all my reminders",
+    "intent": null,
+    "args": {}
+  },
+  {
+    "id": "p26",
+    "command": "Rename launch.pdf to final.pdf",
+    "intent": null,
+    "args": {}
+  },
+  {
+    "id": "p27",
+    "command": "Schedule review every Monday at 3 PM for 30 minutes",
+    "intent": null,
+    "args": {}
+  },
+  {
+    "id": "p28",
+    "command": "Close all my Chrome tabs",
+    "intent": null,
+    "args": {}
+  },
+  {
+    "id": "p29",
+    "command": "Replace everything in my Launch Ideas note with hello",
+    "intent": null,
+    "args": {}
+  },
+  {
+    "id": "p30",
+    "command": "Set my microphone volume to 30 percent",
+    "intent": null,
+    "args": {}
+  },
+  {
+    "id": "p31",
+    "command": "Do not open Downloads",
+    "intent": null,
+    "args": {}
+  },
+  {
+    "id": "p32",
+    "command": "Please do not mute my Mac",
+    "intent": null,
+    "args": {}
+  }
+]

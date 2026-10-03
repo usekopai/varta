@@ -120,3 +120,34 @@ New approved candidates require an explicit policy/code review. This guard is no
 secret scanner or a substitute for reviewing commands, labels, and other fixture content.
 We do not accept live user logs or personal candidate lists as test artifacts. See
 [testing Varta](../docs/TESTING.md) for the broader validation workflow.
+
+
+## Natural-phrasing audit
+
+`phrasing-cases.json` adds 32 hand-labelled cases across Finder, Reminders, Calendar, Notes,
+browsers, volume, playback, app opening and web search. Twenty-four supported commands pin
+an intent and selected arguments; eight unsupported or negated commands must remain on a nonautomatic
+route. `check-phrasing.py` asks the current router for plans but never executes them.
+
+From the repository root, build the CLI and run:
+
+```bash
+swift build --package-path app
+python3 eval/check-phrasing.py --live --output eval/results/phrasing.json
+```
+
+The explicit `--live` option is required because this uses configured Jev credentials and
+incurs API usage. There is one logical routing request per case; client retries may add HTTP
+attempts. Local app/site candidates can affect results. Review saved plans before sharing them.
+The script exits nonzero for a mismatch or request failure and records per-case plans locally.
+It checks the specified argument subset rather than every plan field.
+
+In our October 3, 2026 development run with `jev-1.13.0`, the same 30 commands improved from
+22/30 to 30/30 after extending the bounded parsers. All six unsupported requests remained
+nonautomatic. This set guided the fixes, so it is a development regression set, not an unseen
+benchmark or a general accuracy estimate. Two additional leading-negation cases bring the current suite
+to 32 commands; these also check that a negative request cannot become an opposite action.
+A subsequent full run passed 32/32 cases.
+It does not measure voice recognition, end-to-end
+execution success, or speech-to-action latency. The 114-command recorded fixture remains a
+separate offline regression gate.
