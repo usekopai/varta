@@ -7,6 +7,8 @@ patch releases address fixes.
 
 ### Added
 
+- Append dictated text as a new line to one existing simple Apple Notes note, with unique-title lookup and content verification.
+
 - Apple Notes creation with titles and dictated content, using the default destination and readback by note ID.
 
 - Chrome and Safari tab, navigation, reload, and zoom controls with explicit or foreground targeting.
@@ -27,6 +29,8 @@ patch releases address fixes.
 - A labelled 114-command router dataset and public replay fixture.
 
 ### Fixed
+
+- Drain subprocess output while commands run to prevent larger Notes readbacks from blocking on full pipes.
 
 - Cancelled or replaced commands discard pending transcription and model results.
 - Cancellation checks precede subprocess dispatch and accessibility presses.

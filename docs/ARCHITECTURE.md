@@ -250,3 +250,22 @@ The script creates one note in the default folder of the default account and ret
 A separate request reads that note's plaintext; comparison normalizes whitespace but preserves
 words and punctuation. We do not read other notes or automatically retry failed creation.
 Cancellation prevents subsequent dispatches but cannot remove a note already created.
+
+## Appending to notes
+
+The `append_note` intent reuses original-transcript title/body boundaries, with a separate
+support check. Both fields must be explicit; append never invents a default title or creates
+a missing target. Notes resolves the title locally, and only one match may proceed.
+
+We read that note's identifier, HTML, and plaintext using an unambiguous base64 transport.
+Locked/shared notes and attachments are rejected before reading the body. A small allowlist
+of simple HTML tags excludes rich objects, tables, and checklists. Before writing, the script
+checks uniqueness, identifier, attachment/sharing/lock state, and exact original HTML again.
+It writes the preserved HTML plus one escaped paragraph and returns plaintext for comparison
+with the original plus the addition. Notes does not provide an atomic conditional append;
+these checks reduce, but cannot eliminate, a concurrent edit race.
+
+No retry occurs after an uncertain write, and cancellation cannot undo a dispatched write.
+Existing content is not included in Jev requests or subprocess command/error logs. The process
+runner drains both output pipes concurrently so larger readbacks cannot fill a pipe and block
+the child before it exits.

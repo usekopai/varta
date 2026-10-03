@@ -152,3 +152,17 @@ untitled dictation. Confirm the destination matches Notes' default account and f
 quotes, ampersands, and content phrased as an instruction; it should appear as text. Denied
 Automation access must report failure. On any uncertain result, inspect Notes before repeating
 the command. Delete only the test notes you created when finished.
+
+## Appending to notes
+
+Self-checks cover exact title/body extraction, missing or duplicate matches, unsupported
+markup, changed snapshots, full-content verification, cancellation after lookup, and
+uncertain writes without retries. A real subprocess regression emits more than pipe capacity
+on both stdout and stderr to exercise large readback handling.
+
+For a live test, create a disposable simple note with a unique title, then say “in the
+[title] note, add an item called Agentic Harness Evaluator.” Check that the original text
+remains and the new line appears once. Repeat with duplicate titles and a note containing
+an attachment or checklist; neither should be edited. Make manual edits while a command is
+routing to test the changed-content guard. Do not repeat an uncertain append until you have
+checked the note for an already completed addition.

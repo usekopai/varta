@@ -178,15 +178,26 @@ browsers are not supported for these controls.
 | “create a note called Launch ideas” | Create a titled note |
 | “take a note: investigate the installer issue” | Save the content under **Quick note** |
 | “make a new note” | Create a note under **Quick note** |
+| “in the Launch Ideas note, add an item called Agentic Harness Evaluator” | Add the text as a new line to the named note |
 
 We use Apple Notes' default account and default folder. Allow macOS Automation access to
 Notes when prompted. Titles and content come from the original transcript; text is escaped
 before being passed as HTML through AppleScript arguments. We read back the created note
-by its identifier and compare its text before reporting success. Existing notes are never
-changed by this action, and uncertain creation results are not retried automatically.
+by its identifier and compare its text before reporting success. Creation never changes an
+existing note, and uncertain results are not retried automatically.
+
+To append, name the existing note and the text to add. We require one exact title match
+across Notes; no match does not create a note, and duplicate titles require giving the
+intended note a unique title before repeating the command. We preserve the existing HTML,
+recheck it before writing, and compare the complete original text plus the addition afterward.
+Existing note content stays local and is omitted from subprocess command logs.
+
+Appending currently supports simple text notes only. Locked or shared notes, attachments,
+checklists, tables, and other unsupported markup are left untouched. “Add an item” adds a
+plain line, not a checkbox. If an edit cannot be verified, inspect the note before retrying.
 
 Keep the complete request to 200 words and titles to 200 characters. Explicit folders,
-other notes apps, appending to existing notes, attachments, and checkbox formatting are not
+other notes apps, replacing/deleting existing text, attachments, and checkbox formatting are not
 yet supported. If creation or readback fails, check Notes before repeating the command.
 
 ### Apps and menu commands
@@ -209,7 +220,7 @@ Recognition and routing can still be wrong, particularly with unfamiliar names o
 phrases. Supported examples describe intended behavior, not guaranteed outcomes.
 
 We do not yet support multi-step app tasks, brightness controls, or
-vision-based desktop automation. New plain-text notes with dictated content are supported; editing existing notes and
+vision-based desktop automation. New plain-text notes with dictated content are supported; appending plain text to a uniquely named simple note is also supported. Replacing text and
 creating formatted checklists are not.
 
 ## Performance

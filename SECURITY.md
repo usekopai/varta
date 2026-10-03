@@ -60,6 +60,11 @@ See [installation and removal](docs/INSTALLATION.md) for local-data cleanup.
   account/folder, and reads back only the created note by ID. Creation is never retried
   automatically. A timeout or verification error may occur after a note was created;
   inspect Notes before repeating the command.
+- Appending requires one matching note title and supports simple text notes only. We reject
+  locked/shared notes and attachments, preserve existing HTML, and recheck the target and
+  original body before writing. Existing note content is kept local and excluded from command
+  and error logs. Notes has no atomic conditional append; simultaneous edits remain a possible
+  race. We verify the full text afterward and never retry an uncertain write automatically.
 - Verification is partial. It checks supported app/browser state and sometimes asks Jev to
   judge a match. Accessibility presses are reported as unverified. A failed check does not undo
   the action, and an unavailable check is not proof of success.
