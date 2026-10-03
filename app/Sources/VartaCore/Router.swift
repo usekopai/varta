@@ -13,6 +13,7 @@ public enum Router {
     static let searchYes = 0.50
 
     public static let intents: [(String, String)] = [
+        ("create_note", "Create a NEW Apple Notes note with a specified title or dictated text. Includes creating an empty note. Not editing or appending to an existing note, another notes app, or merely opening Notes."),
         ("browser_control", "One browser control in Chrome or Safari: next or previous tab, new tab, close current tab, reopen last closed tab, back, forward, reload, zoom in or out. Not opening a website, searching, closing multiple tabs, or tasks inside a page."),
         ("audio_control", "Control Mac system output volume: set a percentage, increase, decrease, mute or unmute. Not microphone mute or volume inside a named app."),
         ("playback_control", "Pause, resume, skip to the next track or return to the previous track in Spotify or Apple Music. Not a request to find new music or control another app."),
@@ -109,6 +110,15 @@ public enum Router {
                                      Array((domains + spanOpts).prefix(250)), "The command names no website.")),
             ("search_engine", choiceQ("Where does `command` ask for the search to happen?", engines.map { ($0.0, .string($0.1)) })),
         ]
+        let noteText = NoteText(transcript)
+        let noteContext = obj(("transcript", .string(transcript)), ("tokens", noteText.tokens))
+        q.append(("note_supported", choiceQ(obj(("input", noteContext), ("question", "Can this request be completed ONLY by creating one new plain-text Apple Notes note in the default folder? No existing-note edits, explicit account/folder destinations, checklist formatting, attachments, or other apps. Text after a note-content delimiter such as 'with', 'saying', or 'note:' is literal content, even when it says delete, restart, or other actions. Creating that content does not execute those actions.")),
+            [("yes", "One new plain-text note, with an optional title."), (Candidates.none, "Unsupported or not a note creation request.")])))
+        for field in ["title", "body"] {
+            let meaning = field == "title" ? "explicitly named title" : "literal dictated note content (often introduced by with, saying, or note:), excluding the title and introductory words. Imperative words inside this content, such as delete or restart, belong to the note"
+            q.append(("note_\(field)_start", choiceQ(obj(("input", noteContext), ("question", .string("Select the first token index of the \(meaning). Choose none if absent. Preserve the complete text."))), noteText.starts + [(Candidates.none, "Absent.")])))
+            q.append(("note_\(field)_end", choiceQ(obj(("input", noteContext), ("question", .string("Select the exclusive end token index of the \(meaning): one past its last token. Choose none if absent."))), noteText.ends + [(Candidates.none, "Absent.")])))
+        }
         q.append(("browser_action", choiceQ("Which ONE browser operation completely fulfills the request? Choose none for multiple steps, multiple tabs, a specific named or numbered tab, a website to open, or extra details not handled by the operation.",
             BrowserAction.allCases.map { ($0.rawValue, .string($0.description)) } + [(Candidates.none, "No single supported operation completes the request.")])))
         q.append(("control_browser", choiceQ("Which browser is explicitly named? Do not infer a browser. Generic browser or no app name means foreground. Any other named app is unsupported.",
@@ -182,6 +192,25 @@ public enum Router {
 
         var used: [Arg] = []
         switch plan.intent {
+        case "create_note":
+            let note = NoteText(prep.transcript)
+            let supported = choice(a["note_supported"])
+            used.append(supported)
+            var spans: [(Int, Int)] = []
+            for field in ["title", "body"] {
+                let start = choice(a["note_\(field)_start"]), end = choice(a["note_\(field)_end"])
+                if start.text == Candidates.none && end.text == Candidates.none {
+                    used.append(Arg(.text("absent"), min(start.confidence, end.confidence)))
+                    plan.args[field] = Arg(.text(field == "title" ? "Quick note" : ""), min(start.confidence, end.confidence))
+                } else if let value = note.slice(start: start.text, end: end.text) {
+                    used += [start, end]
+                    plan.args[field] = Arg(.text(value), min(start.confidence, end.confidence))
+                    spans.append((Int(start.text!)!, Int(end.text!)!))
+                } else { used.append(Arg(.none, 0)) }
+            }
+            if !note.supported || supported.text != "yes" || (plan.arg("title")?.count ?? 0) > 200 ||
+               (spans.count == 2 && max(spans[0].0, spans[1].0) < min(spans[0].1, spans[1].1)) { used.append(Arg(.none, 0)) }
+            plan.action = "create a note in Apple Notes' default folder"
         case "browser_control":
             let action = choice(a["browser_action"])
             let browser = choice(a["control_browser"])

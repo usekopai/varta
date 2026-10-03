@@ -114,6 +114,7 @@ public final class Executor {
         switch plan.route {
         case .fastpath, .fastpathThenCheck:
             switch plan.intent {
+            case "create_note": createNote(plan, &res, cancel: cancel)
             case "browser_control":
                 res = browserController.execute(operation: plan.arg("operation"), browser: plan.arg("browser"), origin: browserOrigin, cancel: cancel ?? CancelFlag())
             case "audio_control": controlAudio(plan, &res, cancel: cancel)
