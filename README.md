@@ -327,6 +327,13 @@ creating formatted checklists are not.
 
 ## Performance
 
+Our [speech-to-status measurements](docs/LATENCY-2026-10-04.md) found sub-second folder dispatch
+in a prepared synthetic workload, but historical microphone commands that reported success took
+about **2.28 seconds median** to final status. App opening also exposed foreground-verification
+mismatches. We distinguish routing, dispatch and final status; we do not claim universal
+sub-second voice-to-action performance or a comparative speed ranking.
+
+
 In our 15-request routing benchmark on an M4 Pro, Varta produced the expected plan for every
 request, with **360 ms median total routing time** and **674 ms p95**. Subsequent requests using
 the same client had a **356 ms median** and **433 ms p95**.

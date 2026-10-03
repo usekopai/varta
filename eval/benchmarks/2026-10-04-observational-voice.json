@@ -1,0 +1,914 @@
+{
+  "benchmark": "observational-voice-log-status-v1",
+  "incompleteAttempts": 7,
+  "all": {
+    "attempts": 37,
+    "outcomes": {
+      "success": 21,
+      "failure": 13,
+      "clarification": 3
+    },
+    "stages": {
+      "transcriptMs": {
+        "count": 37,
+        "median_ms": 1321.0,
+        "p95_ms": 2992.0,
+        "min_ms": 13.0,
+        "max_ms": 3318.0
+      },
+      "transcriptToPlanMs": {
+        "count": 37,
+        "median_ms": 545.0,
+        "p95_ms": 1074.0,
+        "min_ms": 358.0,
+        "max_ms": 1886.0
+      },
+      "planToStatusMs": {
+        "count": 37,
+        "median_ms": 212.0,
+        "p95_ms": 3213.0,
+        "min_ms": 0.0,
+        "max_ms": 4949.0
+      },
+      "releaseToStatusMs": {
+        "count": 37,
+        "median_ms": 2166.0,
+        "p95_ms": 5696.0,
+        "min_ms": 554.0,
+        "max_ms": 7897.0
+      }
+    },
+    "successfulStatusMs": {
+      "count": 21,
+      "median_ms": 2283.0,
+      "p95_ms": 5696.0,
+      "min_ms": 1717.0,
+      "max_ms": 7897.0
+    },
+    "successfulUnderOneSecond": 0
+  },
+  "byIntent": {
+    "app_task": {
+      "attempts": 3,
+      "outcomes": {
+        "failure": 3
+      },
+      "stages": {
+        "transcriptMs": {
+          "count": 3,
+          "median_ms": 977.0,
+          "p95_ms": 1606.0,
+          "min_ms": 27.0,
+          "max_ms": 1606.0
+        },
+        "transcriptToPlanMs": {
+          "count": 3,
+          "median_ms": 578.0,
+          "p95_ms": 885.0,
+          "min_ms": 562.0,
+          "max_ms": 885.0
+        },
+        "planToStatusMs": {
+          "count": 3,
+          "median_ms": 544.0,
+          "p95_ms": 566.0,
+          "min_ms": 529.0,
+          "max_ms": 566.0
+        },
+        "releaseToStatusMs": {
+          "count": 3,
+          "median_ms": 2105.0,
+          "p95_ms": 2713.0,
+          "min_ms": 1456.0,
+          "max_ms": 2713.0
+        }
+      },
+      "successfulStatusMs": {
+        "count": 0
+      },
+      "successfulUnderOneSecond": 0
+    },
+    "append_note": {
+      "attempts": 5,
+      "outcomes": {
+        "failure": 4,
+        "success": 1
+      },
+      "stages": {
+        "transcriptMs": {
+          "count": 5,
+          "median_ms": 1251.0,
+          "p95_ms": 1680.0,
+          "min_ms": 13.0,
+          "max_ms": 1680.0
+        },
+        "transcriptToPlanMs": {
+          "count": 5,
+          "median_ms": 913.0,
+          "p95_ms": 1886.0,
+          "min_ms": 540.0,
+          "max_ms": 1886.0
+        },
+        "planToStatusMs": {
+          "count": 5,
+          "median_ms": 1.0,
+          "p95_ms": 1373.0,
+          "min_ms": 0.0,
+          "max_ms": 1373.0
+        },
+        "releaseToStatusMs": {
+          "count": 5,
+          "median_ms": 2333.0,
+          "p95_ms": 3272.0,
+          "min_ms": 554.0,
+          "max_ms": 3272.0
+        }
+      },
+      "successfulStatusMs": {
+        "count": 1,
+        "median_ms": 3272.0,
+        "p95_ms": 3272.0,
+        "min_ms": 3272.0,
+        "max_ms": 3272.0
+      },
+      "successfulUnderOneSecond": 0
+    },
+    "audio_control": {
+      "attempts": 4,
+      "outcomes": {
+        "success": 4
+      },
+      "stages": {
+        "transcriptMs": {
+          "count": 4,
+          "median_ms": 1081.0,
+          "p95_ms": 1360.0,
+          "min_ms": 603.0,
+          "max_ms": 1360.0
+        },
+        "transcriptToPlanMs": {
+          "count": 4,
+          "median_ms": 452.0,
+          "p95_ms": 979.0,
+          "min_ms": 358.0,
+          "max_ms": 979.0
+        },
+        "planToStatusMs": {
+          "count": 4,
+          "median_ms": 210.0,
+          "p95_ms": 228.0,
+          "min_ms": 209.0,
+          "max_ms": 228.0
+        },
+        "releaseToStatusMs": {
+          "count": 4,
+          "median_ms": 1810.0,
+          "p95_ms": 2048.0,
+          "min_ms": 1742.0,
+          "max_ms": 2048.0
+        }
+      },
+      "successfulStatusMs": {
+        "count": 4,
+        "median_ms": 1810.0,
+        "p95_ms": 2048.0,
+        "min_ms": 1742.0,
+        "max_ms": 2048.0
+      },
+      "successfulUnderOneSecond": 0
+    },
+    "browser_control": {
+      "attempts": 3,
+      "outcomes": {
+        "success": 3
+      },
+      "stages": {
+        "transcriptMs": {
+          "count": 3,
+          "median_ms": 1227.0,
+          "p95_ms": 1474.0,
+          "min_ms": 1204.0,
+          "max_ms": 1474.0
+        },
+        "transcriptToPlanMs": {
+          "count": 3,
+          "median_ms": 445.0,
+          "p95_ms": 537.0,
+          "min_ms": 379.0,
+          "max_ms": 537.0
+        },
+        "planToStatusMs": {
+          "count": 3,
+          "median_ms": 111.0,
+          "p95_ms": 272.0,
+          "min_ms": 80.0,
+          "max_ms": 272.0
+        },
+        "releaseToStatusMs": {
+          "count": 3,
+          "median_ms": 1729.0,
+          "p95_ms": 2283.0,
+          "min_ms": 1717.0,
+          "max_ms": 2283.0
+        }
+      },
+      "successfulStatusMs": {
+        "count": 3,
+        "median_ms": 1729.0,
+        "p95_ms": 2283.0,
+        "min_ms": 1717.0,
+        "max_ms": 2283.0
+      },
+      "successfulUnderOneSecond": 0
+    },
+    "calendar_control": {
+      "attempts": 5,
+      "outcomes": {
+        "clarification": 3,
+        "success": 2
+      },
+      "stages": {
+        "transcriptMs": {
+          "count": 5,
+          "median_ms": 1258.0,
+          "p95_ms": 1544.0,
+          "min_ms": 13.0,
+          "max_ms": 1544.0
+        },
+        "transcriptToPlanMs": {
+          "count": 5,
+          "median_ms": 553.0,
+          "p95_ms": 781.0,
+          "min_ms": 530.0,
+          "max_ms": 781.0
+        },
+        "planToStatusMs": {
+          "count": 5,
+          "median_ms": 4.0,
+          "p95_ms": 2902.0,
+          "min_ms": 3.0,
+          "max_ms": 2902.0
+        },
+        "releaseToStatusMs": {
+          "count": 5,
+          "median_ms": 1792.0,
+          "p95_ms": 5037.0,
+          "min_ms": 798.0,
+          "max_ms": 5037.0
+        }
+      },
+      "successfulStatusMs": {
+        "count": 2,
+        "median_ms": 2166.0,
+        "p95_ms": 5037.0,
+        "min_ms": 2166.0,
+        "max_ms": 5037.0
+      },
+      "successfulUnderOneSecond": 0
+    },
+    "create_note": {
+      "attempts": 1,
+      "outcomes": {
+        "success": 1
+      },
+      "stages": {
+        "transcriptMs": {
+          "count": 1,
+          "median_ms": 771.0,
+          "p95_ms": 771.0,
+          "min_ms": 771.0,
+          "max_ms": 771.0
+        },
+        "transcriptToPlanMs": {
+          "count": 1,
+          "median_ms": 647.0,
+          "p95_ms": 647.0,
+          "min_ms": 647.0,
+          "max_ms": 647.0
+        },
+        "planToStatusMs": {
+          "count": 1,
+          "median_ms": 3213.0,
+          "p95_ms": 3213.0,
+          "min_ms": 3213.0,
+          "max_ms": 3213.0
+        },
+        "releaseToStatusMs": {
+          "count": 1,
+          "median_ms": 4631.0,
+          "p95_ms": 4631.0,
+          "min_ms": 4631.0,
+          "max_ms": 4631.0
+        }
+      },
+      "successfulStatusMs": {
+        "count": 1,
+        "median_ms": 4631.0,
+        "p95_ms": 4631.0,
+        "min_ms": 4631.0,
+        "max_ms": 4631.0
+      },
+      "successfulUnderOneSecond": 0
+    },
+    "create_reminder": {
+      "attempts": 1,
+      "outcomes": {
+        "success": 1
+      },
+      "stages": {
+        "transcriptMs": {
+          "count": 1,
+          "median_ms": 1671.0,
+          "p95_ms": 1671.0,
+          "min_ms": 1671.0,
+          "max_ms": 1671.0
+        },
+        "transcriptToPlanMs": {
+          "count": 1,
+          "median_ms": 939.0,
+          "p95_ms": 939.0,
+          "min_ms": 939.0,
+          "max_ms": 939.0
+        },
+        "planToStatusMs": {
+          "count": 1,
+          "median_ms": 3086.0,
+          "p95_ms": 3086.0,
+          "min_ms": 3086.0,
+          "max_ms": 3086.0
+        },
+        "releaseToStatusMs": {
+          "count": 1,
+          "median_ms": 5696.0,
+          "p95_ms": 5696.0,
+          "min_ms": 5696.0,
+          "max_ms": 5696.0
+        }
+      },
+      "successfulStatusMs": {
+        "count": 1,
+        "median_ms": 5696.0,
+        "p95_ms": 5696.0,
+        "min_ms": 5696.0,
+        "max_ms": 5696.0
+      },
+      "successfulUnderOneSecond": 0
+    },
+    "finder_control": {
+      "attempts": 4,
+      "outcomes": {
+        "success": 3,
+        "failure": 1
+      },
+      "stages": {
+        "transcriptMs": {
+          "count": 4,
+          "median_ms": 1819.0,
+          "p95_ms": 3318.0,
+          "min_ms": 1393.0,
+          "max_ms": 3318.0
+        },
+        "transcriptToPlanMs": {
+          "count": 4,
+          "median_ms": 508.0,
+          "p95_ms": 719.0,
+          "min_ms": 502.0,
+          "max_ms": 719.0
+        },
+        "planToStatusMs": {
+          "count": 4,
+          "median_ms": 89.0,
+          "p95_ms": 1788.0,
+          "min_ms": 0.0,
+          "max_ms": 1788.0
+        },
+        "releaseToStatusMs": {
+          "count": 4,
+          "median_ms": 2627.0,
+          "p95_ms": 4917.0,
+          "min_ms": 1901.0,
+          "max_ms": 4917.0
+        }
+      },
+      "successfulStatusMs": {
+        "count": 3,
+        "median_ms": 3949.0,
+        "p95_ms": 4917.0,
+        "min_ms": 2627.0,
+        "max_ms": 4917.0
+      },
+      "successfulUnderOneSecond": 0
+    },
+    "none": {
+      "attempts": 4,
+      "outcomes": {
+        "failure": 4
+      },
+      "stages": {
+        "transcriptMs": {
+          "count": 4,
+          "median_ms": 1373.0,
+          "p95_ms": 2992.0,
+          "min_ms": 1268.0,
+          "max_ms": 2992.0
+        },
+        "transcriptToPlanMs": {
+          "count": 4,
+          "median_ms": 402.0,
+          "p95_ms": 652.0,
+          "min_ms": 391.0,
+          "max_ms": 652.0
+        },
+        "planToStatusMs": {
+          "count": 4,
+          "median_ms": 0.0,
+          "p95_ms": 0.0,
+          "min_ms": 0.0,
+          "max_ms": 0.0
+        },
+        "releaseToStatusMs": {
+          "count": 4,
+          "median_ms": 2025.0,
+          "p95_ms": 3410.0,
+          "min_ms": 1659.0,
+          "max_ms": 3410.0
+        }
+      },
+      "successfulStatusMs": {
+        "count": 0
+      },
+      "successfulUnderOneSecond": 0
+    },
+    "play_music": {
+      "attempts": 4,
+      "outcomes": {
+        "success": 3,
+        "failure": 1
+      },
+      "stages": {
+        "transcriptMs": {
+          "count": 4,
+          "median_ms": 1340.0,
+          "p95_ms": 2236.0,
+          "min_ms": 19.0,
+          "max_ms": 2236.0
+        },
+        "transcriptToPlanMs": {
+          "count": 4,
+          "median_ms": 493.0,
+          "p95_ms": 712.0,
+          "min_ms": 421.0,
+          "max_ms": 712.0
+        },
+        "planToStatusMs": {
+          "count": 4,
+          "median_ms": 1705.0,
+          "p95_ms": 4949.0,
+          "min_ms": 1658.0,
+          "max_ms": 4949.0
+        },
+        "releaseToStatusMs": {
+          "count": 4,
+          "median_ms": 3466.0,
+          "p95_ms": 7897.0,
+          "min_ms": 2170.0,
+          "max_ms": 7897.0
+        }
+      },
+      "successfulStatusMs": {
+        "count": 3,
+        "median_ms": 3867.0,
+        "p95_ms": 7897.0,
+        "min_ms": 2170.0,
+        "max_ms": 7897.0
+      },
+      "successfulUnderOneSecond": 0
+    },
+    "playback_control": {
+      "attempts": 3,
+      "outcomes": {
+        "success": 3
+      },
+      "stages": {
+        "transcriptMs": {
+          "count": 3,
+          "median_ms": 1321.0,
+          "p95_ms": 1946.0,
+          "min_ms": 1118.0,
+          "max_ms": 1946.0
+        },
+        "transcriptToPlanMs": {
+          "count": 3,
+          "median_ms": 395.0,
+          "p95_ms": 454.0,
+          "min_ms": 379.0,
+          "max_ms": 454.0
+        },
+        "planToStatusMs": {
+          "count": 3,
+          "median_ms": 338.0,
+          "p95_ms": 378.0,
+          "min_ms": 212.0,
+          "max_ms": 378.0
+        },
+        "releaseToStatusMs": {
+          "count": 3,
+          "median_ms": 1928.0,
+          "p95_ms": 2738.0,
+          "min_ms": 1875.0,
+          "max_ms": 2738.0
+        }
+      },
+      "successfulStatusMs": {
+        "count": 3,
+        "median_ms": 1928.0,
+        "p95_ms": 2738.0,
+        "min_ms": 1875.0,
+        "max_ms": 2738.0
+      },
+      "successfulUnderOneSecond": 0
+    }
+  },
+  "samples": [
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 2236.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "play_music",
+      "outcome": "success",
+      "releaseToStatusMs": 7897.0,
+      "transcriptToPlanMs": 712.0,
+      "planToStatusMs": 4949.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1340.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "play_music",
+      "outcome": "failure",
+      "releaseToStatusMs": 3466.0,
+      "transcriptToPlanMs": 421.0,
+      "planToStatusMs": 1705.0
+    },
+    {
+      "speechSource": "live pass (instant)",
+      "transcriptMs": 19.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "play_music",
+      "outcome": "success",
+      "releaseToStatusMs": 2170.0,
+      "transcriptToPlanMs": 493.0,
+      "planToStatusMs": 1658.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 603.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "audio_control",
+      "outcome": "success",
+      "releaseToStatusMs": 1810.0,
+      "transcriptToPlanMs": 979.0,
+      "planToStatusMs": 228.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 1360.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "audio_control",
+      "outcome": "success",
+      "releaseToStatusMs": 2048.0,
+      "transcriptToPlanMs": 462.0,
+      "planToStatusMs": 226.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 1946.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "playback_control",
+      "outcome": "success",
+      "releaseToStatusMs": 2738.0,
+      "transcriptToPlanMs": 454.0,
+      "planToStatusMs": 338.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1321.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "playback_control",
+      "outcome": "success",
+      "releaseToStatusMs": 1928.0,
+      "transcriptToPlanMs": 395.0,
+      "planToStatusMs": 212.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 1784.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "none",
+      "outcome": "failure",
+      "releaseToStatusMs": 2186.0,
+      "transcriptToPlanMs": 402.0,
+      "planToStatusMs": 0.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 1271.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "audio_control",
+      "outcome": "success",
+      "releaseToStatusMs": 1839.0,
+      "transcriptToPlanMs": 358.0,
+      "planToStatusMs": 210.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 1268.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "none",
+      "outcome": "failure",
+      "releaseToStatusMs": 1659.0,
+      "transcriptToPlanMs": 391.0,
+      "planToStatusMs": 0.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1081.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "audio_control",
+      "outcome": "success",
+      "releaseToStatusMs": 1742.0,
+      "transcriptToPlanMs": 452.0,
+      "planToStatusMs": 209.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1373.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "none",
+      "outcome": "failure",
+      "releaseToStatusMs": 2025.0,
+      "transcriptToPlanMs": 652.0,
+      "planToStatusMs": 0.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 2992.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "none",
+      "outcome": "failure",
+      "releaseToStatusMs": 3410.0,
+      "transcriptToPlanMs": 418.0,
+      "planToStatusMs": 0.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1118.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "playback_control",
+      "outcome": "success",
+      "releaseToStatusMs": 1875.0,
+      "transcriptToPlanMs": 379.0,
+      "planToStatusMs": 378.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 1474.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "browser_control",
+      "outcome": "success",
+      "releaseToStatusMs": 2283.0,
+      "transcriptToPlanMs": 537.0,
+      "planToStatusMs": 272.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1204.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "browser_control",
+      "outcome": "success",
+      "releaseToStatusMs": 1729.0,
+      "transcriptToPlanMs": 445.0,
+      "planToStatusMs": 80.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1227.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "browser_control",
+      "outcome": "success",
+      "releaseToStatusMs": 1717.0,
+      "transcriptToPlanMs": 379.0,
+      "planToStatusMs": 111.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 771.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "create_note",
+      "outcome": "success",
+      "releaseToStatusMs": 4631.0,
+      "transcriptToPlanMs": 647.0,
+      "planToStatusMs": 3213.0
+    },
+    {
+      "speechSource": "live pass (instant)",
+      "transcriptMs": 27.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "app_task",
+      "outcome": "failure",
+      "releaseToStatusMs": 1456.0,
+      "transcriptToPlanMs": 885.0,
+      "planToStatusMs": 544.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 977.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "app_task",
+      "outcome": "failure",
+      "releaseToStatusMs": 2105.0,
+      "transcriptToPlanMs": 562.0,
+      "planToStatusMs": 566.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1680.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "append_note",
+      "outcome": "failure",
+      "releaseToStatusMs": 3171.0,
+      "transcriptToPlanMs": 913.0,
+      "planToStatusMs": 578.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1259.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "append_note",
+      "outcome": "failure",
+      "releaseToStatusMs": 2333.0,
+      "transcriptToPlanMs": 1074.0,
+      "planToStatusMs": 0.0
+    },
+    {
+      "speechSource": "live pass (instant)",
+      "transcriptMs": 14.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "append_note",
+      "outcome": "failure",
+      "releaseToStatusMs": 554.0,
+      "transcriptToPlanMs": 540.0,
+      "planToStatusMs": 0.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1251.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "append_note",
+      "outcome": "failure",
+      "releaseToStatusMs": 2081.0,
+      "transcriptToPlanMs": 829.0,
+      "planToStatusMs": 1.0
+    },
+    {
+      "speechSource": "live pass (instant)",
+      "transcriptMs": 13.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "append_note",
+      "outcome": "success",
+      "releaseToStatusMs": 3272.0,
+      "transcriptToPlanMs": 1886.0,
+      "planToStatusMs": 1373.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 1606.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "app_task",
+      "outcome": "failure",
+      "releaseToStatusMs": 2713.0,
+      "transcriptToPlanMs": 578.0,
+      "planToStatusMs": 529.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1671.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "create_reminder",
+      "outcome": "success",
+      "releaseToStatusMs": 5696.0,
+      "transcriptToPlanMs": 939.0,
+      "planToStatusMs": 3086.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 2456.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "finder_control",
+      "outcome": "success",
+      "releaseToStatusMs": 4917.0,
+      "transcriptToPlanMs": 673.0,
+      "planToStatusMs": 1788.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1393.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "finder_control",
+      "outcome": "failure",
+      "releaseToStatusMs": 1901.0,
+      "transcriptToPlanMs": 508.0,
+      "planToStatusMs": 0.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 3318.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "finder_control",
+      "outcome": "success",
+      "releaseToStatusMs": 3949.0,
+      "transcriptToPlanMs": 502.0,
+      "planToStatusMs": 129.0
+    },
+    {
+      "speechSource": "live pass (instant)",
+      "transcriptMs": 13.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "calendar_control",
+      "outcome": "clarification",
+      "releaseToStatusMs": 798.0,
+      "transcriptToPlanMs": 781.0,
+      "planToStatusMs": 4.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1230.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "calendar_control",
+      "outcome": "clarification",
+      "releaseToStatusMs": 1778.0,
+      "transcriptToPlanMs": 545.0,
+      "planToStatusMs": 3.0
+    },
+    {
+      "speechSource": "live pass (waited)",
+      "transcriptMs": 1258.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "calendar_control",
+      "outcome": "clarification",
+      "releaseToStatusMs": 1792.0,
+      "transcriptToPlanMs": 530.0,
+      "planToStatusMs": 4.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 1544.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "calendar_control",
+      "outcome": "success",
+      "releaseToStatusMs": 5037.0,
+      "transcriptToPlanMs": 591.0,
+      "planToStatusMs": 2902.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 1523.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "calendar_control",
+      "outcome": "success",
+      "releaseToStatusMs": 2166.0,
+      "transcriptToPlanMs": 553.0,
+      "planToStatusMs": 90.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 1819.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "finder_control",
+      "outcome": "success",
+      "releaseToStatusMs": 2627.0,
+      "transcriptToPlanMs": 719.0,
+      "planToStatusMs": 89.0
+    },
+    {
+      "speechSource": "final pass",
+      "transcriptMs": 1560.0,
+      "measurement": "legacy_stop_to_status_estimate",
+      "intent": "play_music",
+      "outcome": "success",
+      "releaseToStatusMs": 3867.0,
+      "transcriptToPlanMs": 565.0,
+      "planToStatusMs": 1742.0
+    }
+  ],
+  "notes": [
+    "No transcripts, titles, paths, calendar data or provider bodies exported.",
+    "Legacy logs span builds and uncontrolled human voice commands; successful status is not independently judged correctness.",
+    "Legacy start is transcription-stop task entry, estimated from a rounded duration plus wall-clock log times; not exact physical key release.",
+    "Modern timing records use monotonic time from stopListening entry to pipeline status, before UI presentation.",
+    "Incomplete attempts are counted separately; completed failures and clarifications remain in all-attempt distributions.",
+    "Nearest-rank percentiles. No inferred speech-recognition accuracy or visible-action timestamps."
+  ],
+  "exportedOn": "2026-10-04",
+  "sourceBuilds": "Mixed development builds; not recoverable per sample from legacy logs"
+}

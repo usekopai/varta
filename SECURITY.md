@@ -130,3 +130,12 @@ named calendar. Results appear locally in a Varta window. Existing event details
 from pipeline logs and are never sent to Jev; normal handling still applies to the request
 you dictate and the confirmation for an event you create. Agenda display does not execute
 instructions embedded in event titles. Pending clarification lives in memory for 90 seconds.
+
+
+## Timing records
+
+The app adds timing-only JSON records to its existing local log. They contain a random command
+identifier, timestamp, app version, intent, speech reuse source, outcome and stage durations.
+They omit transcripts, arguments, file paths, note/event titles and response bodies. These
+records are not uploaded. Existing transcript logging is unchanged. The timing analyzer exports
+an allowlisted subset of fields and counts incomplete attempts without exporting command text.

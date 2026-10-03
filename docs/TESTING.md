@@ -257,3 +257,15 @@ python3 eval/check-phrasing.py --live --output eval/results/phrasing.json
 This uses configured Jev credentials and incurs API usage. It does not execute plans or test
 speech recognition, native app behavior, or permission prompts. Results remain under the
 ignored results directory. See [the evaluation guide](../eval/README.md) for scoring and limits.
+
+
+## Command timing
+
+Self-tests check monotonic stage boundaries, one terminal record per command, cancellation,
+follow-ups without routing, and payload exclusion. Run the Python analyzer tests with
+`python3 -m unittest discover -s eval -p 'test_timing_analysis.py'`; these cover midnight,
+incomplete attempts, modern/legacy deduplication, nearest-rank percentiles and redaction.
+
+For a synthetic-audio run through real app actions, see the
+[October 4 timing report](LATENCY-2026-10-04.md). This makes API requests and changes foreground
+apps. It does not substitute for microphone trials or independent visible-completion checks.

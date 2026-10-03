@@ -5,6 +5,20 @@ structured plan in one Jev routing request, and execute supported actions direct
 We measure transcription, routing, and visible completion separately so the results describe
 what users actually experience.
 
+## Latest speech-to-status measurements
+
+Our [October 4 end-to-end timing report](LATENCY-2026-10-04.md) separates controlled synthetic
+audio from historical microphone data and includes unsuccessful attempts. In the synthetic
+confirmation run, opening Downloads reported dispatch in 722 ms median / 809 ms p95 across
+five attempts. Calculator and Notes final statuses took roughly 1.7–1.9 seconds median and
+included five foreground-verification mismatches across ten attempts. These are different
+completion boundaries and do not establish visible-action speed.
+
+Historical microphone commands that reported success took approximately 2.28 seconds median
+to final status across 21 samples spanning development builds. We cannot substantiate a general
+sub-second voice-to-action or comparative fastest-app claim. The report contains raw timing-only
+samples, methodology, coverage limits and reproduction commands.
+
 ## Routing benchmark
 
 On an Apple M4 Pro with 24 GB RAM, macOS 26.5.1, Swift 6.3.2, and Jev `jev-1.13.0`, our

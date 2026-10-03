@@ -7,6 +7,10 @@ patch releases address fixes.
 
 ### Added
 
+- Monotonic, timing-only records for voice commands, including cancellation and clarification outcomes.
+- A repeatable synthetic-audio benchmark through real app/folder actions and a redacting voice-log analyzer.
+- A speech-to-status performance report covering successful and unsuccessful attempts and measurement limits.
+
 - Calendar event creation with date/time and duration clarification, named calendars, and saved-field verification.
 - A local day agenda window with event times, calendar names, and up to 50 entries.
 
