@@ -1,0 +1,79 @@
+# Security
+
+We build Varta to execute bounded voice commands on macOS. It can open apps and URLs,
+control music playback, and press explicitly supported menu commands. This document explains
+the data we process, the execution boundaries we enforce, and how to report vulnerabilities.
+
+## Reporting a vulnerability
+
+Use [GitHub private vulnerability reporting](https://github.com/usekopai/varta/security/advisories/new)
+or email **swap@usekopai.com**, rather than opening a public issue. If private reporting is
+unavailable to you, use email.
+
+Include the affected revision, a minimal reproduction, expected and actual behavior, and
+potential impact. Redact credentials and unrelated personal data. During the alpha, we apply
+security fixes to the latest code; we do not maintain older release branches.
+
+## Data and credentials
+
+| Data | Handling in the enabled pipeline |
+|---|---|
+| Microphone audio | Transcribed locally by WhisperKit; Varta does not upload it to Jev |
+| Transcript | Sent to TypeSafe's Jev API to route commands and, where needed, judge outcomes |
+| Installed app names and website candidates | Discovered locally; shortlisted names and website titles/URLs are included in Jev requests. Websites can come from Chrome bookmarks and top sites |
+| App controls | Accessibility labels and menu paths are sent to Jev for selection; a selected control description may be sent in a second request |
+| Playback and page metadata | Verification may send track/artist/album or active Chrome page title/URL with the command |
+| Logs | `~/.varta/app.log` can contain transcripts, plans, URLs, and observed results; build logs are in `~/.varta/build.log` |
+| API key | Setup stores it in the login Keychain, service `com.usekopai.varta`. Environment variables override the Keychain; plaintext `~/.varta/dev.env` is a development fallback |
+| Signing identity | Local self-signed certificate and private key in `~/.varta/signing.keychain-db`; not an Apple Developer ID |
+
+We do not operate an analytics or crash-reporting backend. Jev, model/package download hosts,
+opened sites, search engines, and music services receive requests as part of their functions.
+Their terms govern how they process and retain submitted data. Recorded evaluation fixtures
+also include candidate lists; review them for personal data before sharing or committing them.
+
+See [installation and removal](docs/INSTALLATION.md) for local-data cleanup.
+
+## Execution boundaries
+
+- Commands use argument arrays and AppleScript `on run argv`, rather than interpolating spoken
+  text into a shell script. This limits shell injection; it does not validate every destination
+  URL or the consequences of opening it.
+- Jev selects from candidates built by code. Candidates can originate in the transcript or
+  local data, and a wrong selection remains possible.
+- Confidence thresholds can decline ambiguous commands. Fixture accuracy does not establish
+  safety on unseen commands, other languages, or changed app interfaces.
+- Accessibility presses are restricted to exact English menu paths in known bundle IDs:
+  Notes (`com.apple.Notes`) → File → New Note; Safari (`com.apple.Safari`) and Chrome
+  (`com.google.Chrome`) → View → Zoom In/Zoom Out. The app rechecks process identity,
+  foreground status, menu ancestry, element identity, enabled state and press support.
+  Arbitrary buttons, generic confirmations, unknown apps and localized paths are rejected.
+  This assumes the local applications and macOS accessibility service are trusted; bundle
+  IDs are not cryptographic app authentication.
+- Esc and replacement commands invalidate pending work. Cancellation is checked after routing
+  and accessibility requests and before new action dispatches; cancelled transcriptions and
+  stale UI events are discarded. It does not roll back actions already dispatched to macOS,
+  and an in-flight network request or subprocess may finish after cancellation.
+- Verification is partial. It checks supported app/browser state and sometimes asks Jev to
+  judge a match. Accessibility presses are reported as unverified. A failed check does not undo
+  the action, and an unavailable check is not proof of success.
+
+## Experimental computer use
+
+`Features.computerUse` is false. The enabled pipeline does not take or transmit screenshots,
+or use the experimental multi-step vision agent. That source contains additional capabilities,
+including screenshots and synthetic keyboard/mouse input, and checks such as password-field
+blocking. Those checks are not a general guarantee about the enabled accessibility tier.
+
+We keep computer use disabled while developing it. Enabling it introduces additional
+permissions, providers, and outbound data and requires a separate security review.
+
+## Scope
+
+Please report crafted commands, web pages, documents, app controls, or local inputs that cause
+unexpected actions, bypass intended guards, expose credentials, or disclose data beyond the
+behavior documented above. Reports concerning dependencies are welcome when Varta's usage
+creates exposure; upstream fixes may also be necessary.
+
+A source build being self-signed rather than notarized, and the documented need for macOS
+permissions, are expected properties rather than vulnerabilities by themselves.
