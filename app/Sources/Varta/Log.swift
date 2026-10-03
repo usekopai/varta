@@ -1,4 +1,5 @@
 import Foundation
+import VartaCore
 
 /// Appends to ~/.varta/app.log so a failed command can be traced after the fact.
 enum Log {
@@ -10,9 +11,14 @@ enum Log {
         return f
     }()
 
+    static func timing(_ sample: CommandTiming.Sample) {
+        guard let data = try? JSONEncoder().encode(sample), let json = String(data: data, encoding: .utf8) else { return }
+        write("timing " + json)
+    }
     static func write(_ message: String) {
-        let line = "\(stamp.string(from: Date())) \(message)\n"
+        let timestamp = Date()
         queue.async {
+            let line = "\(stamp.string(from: timestamp)) \(message)\n"
             try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
             if let h = try? FileHandle(forWritingTo: url) {
                 h.seekToEndOfFile()

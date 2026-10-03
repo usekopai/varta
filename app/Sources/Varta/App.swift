@@ -12,6 +12,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let hotkeyState = HotkeyState()
     private var pipeline: Pipeline!
     private var panel: NotchPanel!
+    private var timing: CommandTiming?
     private var agendaWindow: CalendarAgendaWindow?
     private var statusItem: NSStatusItem!
     private var setupWindow: NSWindow?
@@ -153,6 +154,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         // One token covers recording, final transcription, routing and execution. Replacing
         // it invalidates pending transcription and queued UI events from the previous command.
+        if let sample = timing?.finish("replaced") { Log.timing(sample) }
         cancel.cancel()
         let flag = CancelFlag()
         cancel = flag
@@ -175,6 +177,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func stopListening() {
         guard model.phase == .listening else { return }
+        let measurement = CommandTiming()
+        timing = measurement
         releasePoll?.invalidate()
         toggleMode = false
         model.phase = .thinking
@@ -186,21 +190,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             let t0 = Date()
             let text = await listener.stop().trimmingCharacters(in: .whitespacesAndNewlines)
             guard self.cancel === flag, !flag.isSet else { return }
+            measurement.transcribed(source: listener.lastSource)
             model.level = 0
             Log.write(String(format: "transcript (%@, %.0f ms after release, held %.1f s): \"%@\"", listener.lastSource, Date().timeIntervalSince(t0) * 1000, heldFor, text))
-            guard !text.isEmpty else { show(message: "Didn't hear anything", for: 1.5); return }
-            guard Credentials.has(.typesafe) else { show(message: "Add your TypeSafe key in Setup (menu bar → Setup…)", for: 5); return }
+            guard !text.isEmpty else { if let sample = measurement.finish("no_speech") { Log.timing(sample) }; show(message: "Didn't hear anything", for: 1.5); return }
+            guard Credentials.has(.typesafe) else { if let sample = measurement.finish("missing_credentials") { Log.timing(sample) }; show(message: "Add your TypeSafe key in Setup (menu bar → Setup…)", for: 5); return }
             model.transcript = text
             model.status = "Understanding…"
-            run(text, flag: flag)
+            run(text, flag: flag, measurement: measurement)
         }
     }
 
-    private func run(_ text: String, flag: CancelFlag) {
+    private func run(_ text: String, flag: CancelFlag, measurement: CommandTiming) {
         guard cancel === flag, !flag.isSet else { return }
         let pipeline = self.pipeline!
         Task.detached {
             await pipeline.run(text, cancel: flag) { event in
+                if let sample = measurement.observe(event) { Log.timing(sample) }
                 DispatchQueue.main.async { [weak self] in
                     guard let self, self.cancel === flag, !flag.isSet else { return }
                     self.handle(event)
@@ -212,6 +218,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func armEscape() {
         escKey = HotKey(keyCode: Keys.escape, modifiers: 0) { [weak self] pressed in
             guard pressed, let self else { return }
+            if let sample = self.timing?.finish("cancelled") { Log.timing(sample) }
             self.cancel.cancel()
             Task { await self.pipeline?.clearPendingReminder() }
             self.releasePoll?.invalidate()

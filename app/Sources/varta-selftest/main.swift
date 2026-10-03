@@ -69,6 +69,7 @@ await reminderTests()
 await finderTests()
 await calendarTests()
 await phrasingTests()
+timingTests()
 
 let pipelineFailures = await PipelineSelfTests.run()
 expect(pipelineFailures.isEmpty, "pipeline cancellation and replacement regressions: \(pipelineFailures.joined(separator: "; "))")
