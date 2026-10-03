@@ -253,13 +253,15 @@ Cancellation prevents subsequent dispatches but cannot remove a note already cre
 
 ## Appending to notes
 
-The `append_note` intent reuses original-transcript title/body boundaries, with a separate
-support check. Both fields must be explicit; append never invents a default title or creates
+The `append_note` intent uses exact original-text boundaries for explicit forms such as
+“in the [title] note, add an item called [text]” and “add [text] to my [title] note.” Other
+phrases use model-selected boundaries. Both paths retain the intent and support checks. Both fields must be explicit; append never invents a default title or creates
 a missing target. Notes resolves the title locally, and only one match may proceed.
 
 We read that note's identifier, HTML, and plaintext using an unambiguous base64 transport.
 Locked/shared notes and attachments are rejected before reading the body. A small allowlist
-of simple HTML tags excludes rich objects, tables, and checklists. Before writing, the script
+of simple HTML tags excludes rich objects, tables, and checklists. We also accept Notes’
+standard span with only a numeric font-size style, preserving it unchanged. Before writing, the script
 checks uniqueness, identifier, attachment/sharing/lock state, and exact original HTML again.
 It writes the preserved HTML plus one escaped paragraph and returns plaintext for comparison
 with the original plus the addition. Notes does not provide an atomic conditional append;

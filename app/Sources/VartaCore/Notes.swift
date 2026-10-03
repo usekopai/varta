@@ -18,6 +18,25 @@ public struct NoteText {
         guard supported, let start, let end, let a = Int(start), let b = Int(end), a >= 0, a < b, b <= ranges.count else { return nil }
         return String(text[ranges[a].lowerBound..<ranges[b - 1].upperBound])
     }
+    /// Explicit delimiters supply exact boundaries for well-defined append phrases. This does
+    /// not classify the request or relax the separate append-support and intent gates.
+    public var explicitAppend: (title: String, body: String)? {
+        let patterns: [(String, Int, Int)] = [
+            (#"^\s*(?:in|to)\s+(?:(?:the|my)\s+)?(.+?)\s+note(?:\s*[, :]\s*|\s+)(?:please\s+)?(?:add|append)\s+(?:(?:an?|another)\s+(?:item|line)\s+(?:called|saying)\s+)?(.+?)\s*$"#, 1, 2),
+            (#"^\s*(?:add|append)\s+(.+?)\s+to\s+(?:(?:my|the)\s+)?(.+?)\s+note[.!]?\s*$"#, 2, 1)
+        ]
+        guard supported else { return nil }
+        for (pattern, titleIndex, bodyIndex) in patterns {
+            let regex = try! NSRegularExpression(pattern: pattern, options: .caseInsensitive)
+            guard let match = regex.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)),
+                  let title = Range(match.range(at: titleIndex), in: text),
+                  let body = Range(match.range(at: bodyIndex), in: text) else { continue }
+            let name = String(text[title])
+            guard !["my", "the", "this", "that", "a", "an"].contains(NoteText.normalized(name).lowercased()) else { continue }
+            return (name, String(text[body]))
+        }
+        return nil
+    }
     public static func html(_ text: String) -> String {
         text.replacingOccurrences(of: "&", with: "&amp;").replacingOccurrences(of: "<", with: "&lt;")
             .replacingOccurrences(of: ">", with: "&gt;").replacingOccurrences(of: "\"", with: "&quot;")
@@ -87,7 +106,11 @@ public enum NoteAppend {
         return tags.matches(in: html, range: NSRange(html.startIndex..., in: html)).allSatisfy {
             guard let range = Range($0.range, in: html) else { return false }
             let tag = String(html[range])
-            return allowed.firstMatch(in: tag, range: NSRange(tag.startIndex..., in: tag)) != nil
+            if allowed.firstMatch(in: tag, range: NSRange(tag.startIndex..., in: tag)) != nil { return true }
+            // Notes exports its own heading size as a span. Permit only this exact
+            // presentation attribute, not arbitrary styles or data/attachment attributes.
+            return tag.range(of: #"^<span style="font-size: [0-9]{1,3}px;?">$|^</span>$"#,
+                             options: [.regularExpression, .caseInsensitive]) != nil
         }
     }
     public static func decode(_ line: String) -> String? {

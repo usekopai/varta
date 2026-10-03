@@ -30,6 +30,9 @@ patch releases address fixes.
 
 ### Fixed
 
+- Extract explicit note-append phrases directly so uncertain model boundaries cannot include the word “note” in the target title.
+- Accept Notes’ standard font-size heading spans when appending to simple notes.
+
 - Drain subprocess output while commands run to prevent larger Notes readbacks from blocking on full pipes.
 
 - Cancelled or replaced commands discard pending transcription and model results.

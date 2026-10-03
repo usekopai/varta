@@ -201,15 +201,26 @@ public enum Router {
             let supported = choice(a[appending ? "note_append_supported" : "note_supported"])
             used.append(supported)
             var spans: [(Int, Int)] = []
+            let explicitAppend = appending ? note.explicitAppend : nil
             for field in ["title", "body"] {
+                // A complete explicit append grammar supplies exact original-text
+                // boundaries; noisy independent model endpoints cannot add "note,".
+                if let explicitAppend {
+                    let value = field == "title" ? explicitAppend.title : explicitAppend.body
+                    let argument = Arg(.text(value), 1)
+                    used.append(argument)
+                    plan.args[field] = argument
+                    continue
+                }
                 let start = choice(a["note_\(field)_start"]), end = choice(a["note_\(field)_end"])
                 if start.text == Candidates.none && end.text == Candidates.none {
                     if appending { used.append(Arg(.none, 0)); continue }
                     used.append(Arg(.text("absent"), min(start.confidence, end.confidence)))
                     plan.args[field] = Arg(.text(field == "title" ? "Quick note" : ""), min(start.confidence, end.confidence))
                 } else if let value = note.slice(start: start.text, end: end.text) {
-                    used += [start, end]
-                    plan.args[field] = Arg(.text(value), min(start.confidence, end.confidence))
+                    let confidence = min(start.confidence, end.confidence)
+                    used.append(Arg(.text(value), confidence))
+                    plan.args[field] = Arg(.text(value), confidence)
                     spans.append((Int(start.text!)!, Int(end.text!)!))
                 } else { used.append(Arg(.none, 0)) }
             }
