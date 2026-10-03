@@ -2,12 +2,12 @@
 
 We built Varta around a short path from speech to action: transcribe locally, select a
 structured plan in one Jev routing request, and execute supported actions directly.
-We measure transcription, routing, and visible completion separately so the results describe
-what users actually experience.
+We report transcription, routing and final-status timings separately, and distinguish these
+measurements from visible completion in the target app.
 
 ## Latest speech-to-status measurements
 
-Our [October 4 end-to-end timing report](LATENCY-2026-10-04.md) separates controlled synthetic
+Our [October 4 speech-to-status report](LATENCY-2026-10-04.md) separates controlled synthetic
 audio from historical microphone data and includes unsuccessful attempts. In the synthetic
 confirmation run, opening Downloads reported dispatch in 722 ms median / 809 ms p95 across
 five attempts. Calculator and Notes final statuses took roughly 1.7–1.9 seconds median and
@@ -15,9 +15,9 @@ included five foreground-verification mismatches across ten attempts. These are 
 completion boundaries and do not establish visible-action speed.
 
 Historical microphone commands that reported success took approximately 2.28 seconds median
-to final status across 21 samples spanning development builds. We cannot substantiate a general
-sub-second voice-to-action or comparative fastest-app claim. The report contains raw timing-only
-samples, methodology, coverage limits and reproduction commands.
+to final status across 21 samples spanning pre-release builds. These measurements do not
+establish sub-second completion across voice commands or a speed ranking against other apps.
+The report contains raw timing-only samples, methodology, coverage limits and reproduction commands.
 
 ## Routing benchmark
 
