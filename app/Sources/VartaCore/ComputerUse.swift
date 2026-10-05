@@ -291,7 +291,10 @@ public final class ComputerAgent {
                 let resp = try await send(system: system, messages: messages, shot: hands.shotSize)
                 res.turns = turn
                 let u = resp["usage"]
-                res.inputTokens += Int((u?["input_tokens"]?.double ?? 0) + (u?["cache_read_input_tokens"]?.double ?? 0) + (u?["cache_creation_input_tokens"]?.double ?? 0))
+                let inputTokens = u?["input_tokens"]?.double ?? 0
+                let cacheReadTokens = u?["cache_read_input_tokens"]?.double ?? 0
+                let cacheCreationTokens = u?["cache_creation_input_tokens"]?.double ?? 0
+                res.inputTokens += Int(inputTokens + cacheReadTokens + cacheCreationTokens)
                 res.outputTokens += Int(u?["output_tokens"]?.double ?? 0)
                 if resp["stop_reason"]?.string == "refusal" { res.summary = "FAILED: the model declined this request"; break }
                 let content = resp["content"]?.array ?? []
