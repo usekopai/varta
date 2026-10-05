@@ -1,4 +1,4 @@
-name: Prepare source release
+name: Prepare app release
 on:
   push:
     tags: ['v*']
@@ -10,16 +10,19 @@ on:
         type: string
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: release-${{ inputs.tag || github.ref_name }}
   cancel-in-progress: false
 
 jobs:
-  release:
+  build:
     runs-on: macos-15
-    timeout-minutes: 30
+    timeout-minutes: 40
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Validate requested tag
         id: version
@@ -34,25 +37,63 @@ jobs:
           echo "tag=$REQUESTED_TAG" >> "$GITHUB_OUTPUT"
           echo "version=${REQUESTED_TAG#v}" >> "$GITHUB_OUTPUT"
       - name: Check out the exact release tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: refs/tags/${{ steps.version.outputs.tag }}
           persist-credentials: false
+      - name: Check Apple silicon toolchain
+        run: |
+          test "$(uname -m)" = arm64
+          swift --version
       - name: Check versions and extract notes
         env:
           RELEASE_VERSION: ${{ steps.version.outputs.version }}
         run: python3 .github/scripts/release-notes.py
-      - name: Build release configuration
-        run: swift build -c release --package-path app
+      - name: Build release configuration with locked dependencies
+        run: swift build -c release --package-path app --disable-automatic-resolution
       - name: Self-tests
         run: swift run --skip-build -c release --package-path app varta-selftest
       - name: Recorded router and accuracy gates (no API key)
         run: python3 .github/scripts/check-eval.py --configuration release
-      - name: Create draft source prerelease
+      - name: Timing analyzer and release metadata tests
+        run: |
+          python3 -m unittest discover -s eval -p 'test_timing_analysis.py'
+          python3 -m unittest discover -s tests
+      - name: Package and verify DMG
+        run: |
+          bash scripts/package-release.sh
+          cp "$RUNNER_TEMP/varta-release-notes.md" app/build/release/
+      - name: Retain verified release files
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: varta-release
+          path: app/build/release/*
+          if-no-files-found: error
+          retention-days: 14
+
+  draft:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download verified release files
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: varta-release
+          path: release-files
+      - name: Create draft prerelease with app and checksums
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ steps.version.outputs.tag }}
-          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ needs.build.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.build.outputs.version }}
+        shell: bash
         run: |
-          gh release create "$RELEASE_TAG" --verify-tag --draft --prerelease \
-            --title "Varta $RELEASE_VERSION" --notes-file "$RUNNER_TEMP/varta-release-notes.md"
+          cd release-files
+          sha256sum -c SHA256SUMS.txt
+          test -s "Varta-${RELEASE_VERSION}-arm64.dmg"
+          test -s varta-release-notes.md
+          gh release create "$RELEASE_TAG" "Varta-${RELEASE_VERSION}-arm64.dmg" SHA256SUMS.txt \
+            --verify-tag --draft --prerelease --title "Varta $RELEASE_VERSION" \
+            --notes-file varta-release-notes.md

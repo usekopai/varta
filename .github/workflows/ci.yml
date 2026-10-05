@@ -15,16 +15,33 @@ concurrency:
 jobs:
   check:
     runs-on: macos-15
-    timeout-minutes: 30
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [debug, release]
     steps:
-      - uses: actions/checkout@v4
-      - name: Show toolchain
-        run: swift --version
-      - name: Build
-        run: swift build --package-path app
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Check Apple silicon toolchain
+        run: |
+          test "$(uname -m)" = arm64
+          swift --version
+      - name: Build locked dependencies
+        run: swift build --package-path app -c "${{ matrix.configuration }}" --disable-automatic-resolution
       - name: Self-tests
-        run: swift run --skip-build --package-path app varta-selftest
+        run: swift run --skip-build --package-path app -c "${{ matrix.configuration }}" varta-selftest
       - name: Recorded router and accuracy gates (no API key)
-        run: python3 .github/scripts/check-eval.py
-      - name: Installer syntax
-        run: zsh -n run.sh
+        run: python3 .github/scripts/check-eval.py --configuration "${{ matrix.configuration }}"
+      - name: Timing analyzer and release metadata tests
+        run: |
+          python3 -m unittest discover -s eval -p 'test_timing_analysis.py'
+          python3 -m unittest discover -s tests
+      - name: Shell syntax
+        run: |
+          zsh -n run.sh
+          bash -n scripts/package-release.sh
+      - name: Build and verify downloadable package
+        if: matrix.configuration == 'release'
+        run: bash scripts/package-release.sh app/build/ci-package
