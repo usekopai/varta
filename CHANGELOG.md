@@ -5,6 +5,8 @@ patch releases address fixes.
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-05
+
 ### Added
 
 - Downloadable Apple-silicon DMG packaging with ad-hoc signatures, checksums and license notices.
