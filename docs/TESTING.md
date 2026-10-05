@@ -16,7 +16,12 @@ swift build --package-path app
 swift run --package-path app varta-selftest
 python3 .github/scripts/check-eval.py
 swift build --package-path app -c release
+swift run --skip-build --package-path app -c release varta-selftest
+python3 .github/scripts/check-eval.py --configuration release
+python3 -m unittest discover -s eval -p 'test_timing_analysis.py'
+python3 -m unittest discover -s tests
 zsh -n run.sh
+bash -n scripts/package-release.sh
 ```
 
 The self-tests cover core behavior, including cancellation and the accessibility policy.
@@ -55,6 +60,11 @@ Use a separate macOS account or test Mac when checking first-time setup. Follow
 Check keychain search-list preservation when testing installer changes. Use mocked
 commands or a disposable account for signing failure scenarios; preserve working
 identities and avoid altering your login keychain to simulate failures.
+
+For downloadable builds, run `bash scripts/package-release.sh` to build and verify a DMG
+without installing it. Follow the [downloaded-app checks](RELEASING.md#test-the-downloaded-app)
+for browser downloads, Gatekeeper, first-time permissions and upgrades. Mounting a locally
+built DMG does not test the security prompts a downloaded app receives.
 
 ## Hands-on command tests
 

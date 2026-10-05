@@ -18,8 +18,8 @@ Hold a key, say what you want, let go. Varta turns your words into supported Mac
 shows the result in a small notch panel, then folds away.
 
 We built Varta with local speech recognition, structured model decisions and direct native
-execution. **Varta is an experimental alpha for Apple silicon Macs**, distributed as source
-under the MIT licence. You'll need a [TypeSafe API key](https://docs.typesafe.ai) for Jev;
+execution. **Varta is an experimental alpha for Apple silicon Macs**, released under the MIT
+licence. You'll need a [TypeSafe API key](https://docs.typesafe.ai) for Jev;
 provider usage charges apply. Microphone audio stays on your Mac; command text goes to Jev.
 
 ## What you can say
@@ -43,6 +43,23 @@ tasks are not supported.
 
 ## Install
 
+### Download the app
+
+Look for **`Varta-VERSION-arm64.dmg`** on [GitHub Releases](https://github.com/usekopai/varta/releases).
+Prebuilt downloads do not require Swift or Xcode. If no DMG has been published yet, use the
+source-build instructions below.
+
+1. Open the DMG, drag **Varta** into **Applications**, and eject the disk image.
+2. Open Varta from Applications. Our alpha downloads are **ad-hoc signed, not Developer ID
+   signed or notarized by Apple**. If macOS blocks the app and you trust the download, use
+   **System Settings → Privacy & Security → Open Anyway** for Varta. Managed Macs may restrict this.
+3. Complete Setup as described below. The initial speech-model download is approximately 1.5 GB.
+
+See [download verification and first-launch instructions](docs/INSTALLATION.md#download-the-app)
+and [Apple’s guidance](https://support.apple.com/102445).
+
+### Build from source
+
 ```bash
 xcode-select --install
 git clone https://github.com/usekopai/varta.git
@@ -52,6 +69,8 @@ cd varta
 
 The installer builds Varta, signs it locally, installs it to `~/Applications`, and opens it.
 The first build and speech-model preparation can take several minutes.
+
+### First launch
 
 In Setup:
 
@@ -65,16 +84,16 @@ it cannot undo actions already dispatched to macOS. Additional integrations requ
 macOS permissions on first use.
 
 See [Installation](docs/INSTALLATION.md) for key setup, permissions, local signing, updates
-and removal. This source build uses a local signature; macOS may require permission reapproval.
+and removal. macOS may require permission reapproval after an update or signing change.
 
 ### Requirements
 
 | Requirement | Details |
 |---|---|
 | Mac | Apple silicon (M1 or later), macOS 15+ |
-| Build tools | Swift 6.0+ and macOS SDK 15+; compatible Xcode Command Line Tools are sufficient |
+| Build tools (source builds only) | Swift 6.0+ and macOS SDK 15+; compatible Xcode Command Line Tools are sufficient |
 | API access | A TypeSafe key for Jev; provider usage charges apply |
-| Disk space | Approximately 1.5 GB for the default speech model, plus build dependencies |
+| Disk space | Approximately 1.5 GB for the default speech model, plus compiled model data; source builds also need build dependencies |
 | Network | Initial downloads and Jev routing/result checks require internet access |
 | Integrations | Chrome/Safari, Spotify/Apple Music and Apple productivity apps, depending on the command |
 

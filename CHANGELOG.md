@@ -7,6 +7,9 @@ patch releases address fixes.
 
 ### Added
 
+- Downloadable Apple-silicon DMG packaging with ad-hoc signatures, checksums and license notices.
+- Draft binary release automation and CI checks for release metadata and packaged app contents.
+- Download, first-launch and manual-update instructions for prebuilt alpha apps.
 - Monotonic, timing-only records for voice commands, including cancellation and clarification outcomes.
 - A repeatable synthetic-audio benchmark through real app/folder actions and a redacting voice-log analyzer.
 - A speech-to-status performance report covering successful and unsuccessful attempts and measurement limits.
@@ -62,7 +65,8 @@ patch releases address fixes.
 
 ### Known limitations
 
-- We distribute source builds for Apple silicon, macOS 15+, and Swift 6.0+.
+- Prebuilt apps and source builds target Apple silicon and macOS 15+. Source builds require Swift 6.0+.
+- Downloaded alpha apps are ad-hoc signed, not Developer ID signed or notarized; macOS may block first launch.
 - Jev requires API access and internet connectivity.
 - Accessibility supports the listed English menu paths only.
 - Multi-step app tasks and brightness controls are not implemented; vision-based computer use is
