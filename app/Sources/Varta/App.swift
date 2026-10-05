@@ -72,7 +72,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func setUpStatusItem() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        statusItem.button?.image = NSImage(systemSymbolName: "waveform", accessibilityDescription: "Varta")
+        if let url = Bundle.main.url(forResource: "VartaMenuTemplate", withExtension: "png"),
+           let image = NSImage(contentsOf: url) {
+            let size = NSSize(width: 18, height: 18)
+            if let retinaURL = Bundle.main.url(forResource: "VartaMenuTemplate@2x", withExtension: "png"),
+               let data = try? Data(contentsOf: retinaURL),
+               let retina = NSBitmapImageRep(data: data) {
+                retina.size = size
+                image.addRepresentation(retina)
+            }
+            image.size = size
+            image.isTemplate = true
+            image.accessibilityDescription = "Varta"
+            statusItem.button?.image = image
+        } else {
+            // SwiftPM launches do not include the installer's app-bundle resources.
+            statusItem.button?.image = NSImage(systemSymbolName: "waveform", accessibilityDescription: "Varta")
+        }
         let menu = NSMenu()
         menu.addItem(withTitle: "Hold \(Shortcut.current.display) to talk", action: nil, keyEquivalent: "").isEnabled = false
         menu.addItem(.separator())

@@ -56,9 +56,10 @@ BIN="app/.build/release/$APP_NAME"
 
 APP="app/build/$APP_NAME.app"
 rm -rf "$APP"
-mkdir -p "$APP/Contents/MacOS"
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/$APP_NAME"
 cp app/Support/Info.plist "$APP/Contents/Info.plist"
+cp app/Support/Assets/* "$APP/Contents/Resources/"
 ok "Built $APP"
 
 # 3. Sign ---------------------------------------------------------------------------------------

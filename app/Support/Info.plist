@@ -10,6 +10,8 @@
     <string>Varta</string>
     <key>CFBundleDisplayName</key>
     <string>Varta</string>
+    <key>CFBundleIconFile</key>
+    <string>Varta</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
