@@ -23,6 +23,8 @@ download both files again from the same release. A checksum does not verify the 
 Open the DMG, drag **Varta** into **Applications**, eject the image, and launch the installed
 copy. Downloads require neither Xcode nor Swift. Avoid keeping competing copies in both
 `/Applications` and `~/Applications` when switching from a source installation.
+Copy the app before launching it; double-clicking Varta inside the mounted DMG does not
+install it. Eject older Varta disk images to avoid opening a different copy.
 
 ### macOS first-launch warning
 
@@ -32,6 +34,12 @@ After attempting to open Varta, if you trust the download, open **System Setting
 Security** and choose **Open Anyway** for Varta, then confirm the macOS prompt.
 [Apple documents this exception](https://support.apple.com/102445). An organization's device
 policy may prevent it. Do not disable Gatekeeper globally to install Varta.
+
+If the initial warning remains visible, choose **Done**, then approve **Open Anyway** for
+the installed copy and confirm **Open** in the follow-up prompt. Dismissing a warning alone
+does not approve the app. This exception permits that copy to run; it does not notarize it.
+Removing the unverified-developer block for downloads requires Developer ID signing and
+Apple notarization, which our current alpha builds do not have.
 
 Follow [first-launch setup](#first-launch-setup) once the app opens. Subsequent versions may
 require a fresh security exception or permission approval because their ad-hoc signature changes.
@@ -66,6 +74,12 @@ The first build downloads Swift dependencies.
 ## First-launch setup
 
 First launch downloads the default Whisper model (approximately 1.5 GB) to `~/.varta/models` and prepares it for local inference. Allow several minutes and additional space for compiled model data. Source builds also need space for the source and build cache. Subsequent launches reuse downloaded models.
+
+Setup shows the download percentage and a progress bar. The menu-bar icon animates during
+download and loading; open its menu for the current status. With Reduce Motion enabled, a
+static preparation icon replaces the animation. After downloading, **Loading and optimizing
+Whisper** can take a few minutes before **Speech ready** appears. If preparation fails,
+Setup displays the error and a **Retry** button.
 
 1. Open **Varta → Setup…** from the menu bar.
 2. Grant Microphone access to record commands and Accessibility access for supported button/menu actions.

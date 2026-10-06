@@ -89,6 +89,14 @@ a page loaded, or music became audible; observe the requested outcome directly.
 
 ## Live routing and speech checks
 
+For model preparation, use a separate test account with no model cache. Check that Setup's
+percentage and bar advance during download, the menu-bar indicator animates and remains
+clickable, and the menu and tooltip show the same status. Close and reopen Setup mid-download.
+At 100%, the app should stay busy while loading/optimizing, then restore the Varta icon at
+Ready. Pressing the shortcut before readiness should show progress rather than a warning.
+Test a network failure and Retry, a cached-model launch, and Reduce Motion. Do not erase
+your normal model cache to simulate a first run.
+
 Build the release CLI first:
 
 ```bash

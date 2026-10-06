@@ -5,6 +5,14 @@ patch releases address fixes.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-06
+
+### Changed
+
+- Show Whisper download progress in Setup, with an animated menu-bar indicator and live speech status.
+- Distinguish speech preparation from command errors in the notch, and offer retry after preparation fails.
+- Show the configured shortcut in the Setup introduction.
+
 ## [0.1.0] - 2026-10-05
 
 ### Added
