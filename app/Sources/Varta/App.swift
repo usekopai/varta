@@ -5,7 +5,7 @@ import SwiftUI
 
 /// Hold ⌥Space and speak; release to send. A quick tap toggles instead: tap, speak, tap again.
 /// Esc stops a running command. Everything runs in this process: speech, Jev routing, actions.
-final class AppDelegate: NSObject, NSApplicationDelegate {
+@MainActor final class AppDelegate: NSObject, NSApplicationDelegate {
     private let model = NotchModel()
     private let listener = Listener()
     private let speechState = SpeechState()
@@ -24,6 +24,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var toggleMode = false
     private var sawSpaceDown = false
     private var releasePoll: Timer?
+    private var speechMenuItem: NSMenuItem?
+    private var speechIndicator: SpeechMenuIndicator?
 
     func applicationDidFinishLaunching(_ note: Notification) {
         let jev = Jev { guard let k = Credentials.get(.typesafe) else { throw JevError(description: "Add a TypeSafe key in Setup") }; return k }
@@ -38,7 +40,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         listener.onLevel = { [weak self] level in DispatchQueue.main.async { self?.model.level = level } }
 
         registerTalkKey()
-        NotificationCenter.default.addObserver(forName: Shortcut.changed, object: nil, queue: .main) { [weak self] _ in self?.registerTalkKey() }
+        NotificationCenter.default.addObserver(forName: Shortcut.changed, object: nil, queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated { self?.registerTalkKey() }
+        }
         // While Setup records a new shortcut, release ours so pressing it doesn't start listening.
         hotkeyState.onRecording = { [weak self] recording in
             if recording { self?.talkKey = nil } else { self?.registerTalkKey() }
@@ -52,19 +56,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         // Load Whisper in the background. The first run downloads it (~1.5 GB) and compiles it for the Neural Engine.
-        let state = speechState, listener = self.listener
-        Task.detached(priority: .utility) {
-            let t0 = Date()
-            await listener.prepare { s in DispatchQueue.main.async { state.status = s } }
-            DispatchQueue.main.async { state.ready = listener.isReady }
-            Log.write(String(format: "speech model: %@ in %.1f s", listener.isReady ? "ready" : "not ready", Date().timeIntervalSince(t0)))
-        }
+        speechState.retry = { [weak self] in self?.prepareSpeech() }
+        speechState.onChange = { [weak self] state in self?.updateSpeech(state) }
+        prepareSpeech()
         // Screens change when an external display is plugged in; keep the panel on the notch.
         NotificationCenter.default.addObserver(forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: .main) { [weak self] _ in
-            guard let self else { return }
-            self.panel.orderOut(nil)
-            self.panel = NotchPanel(model: self.model)
-            self.panel.orderFrontRegardless()
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                self.panel.orderOut(nil)
+                self.panel = NotchPanel(model: self.model)
+                self.panel.orderFrontRegardless()
+            }
         }
     }
 
@@ -91,10 +93,47 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         let menu = NSMenu()
         menu.addItem(withTitle: "Hold \(Shortcut.current.display) to talk", action: nil, keyEquivalent: "").isEnabled = false
+        speechMenuItem = menu.addItem(withTitle: speechState.status, action: nil, keyEquivalent: "")
+        speechMenuItem?.isEnabled = false
         menu.addItem(.separator())
         menu.addItem(withTitle: "Setup…", action: #selector(openSetup), keyEquivalent: ",").target = self
         menu.addItem(withTitle: "Quit Varta", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         statusItem.menu = menu
+        if let button = statusItem.button {
+            speechIndicator = SpeechMenuIndicator(button: button)
+            speechIndicator?.update(speechState.preparation)
+        }
+    }
+
+    private func prepareSpeech() {
+        guard !speechState.isPreparing else { return }
+        speechState.isPreparing = true
+        speechState.preparation = .preparing
+        let listener = self.listener, speechState = self.speechState
+        Task.detached(priority: .utility) {
+            let t0 = Date()
+            await listener.prepare { state in
+                DispatchQueue.main.async { speechState.preparation = state }
+            }
+            DispatchQueue.main.async { speechState.isPreparing = false }
+            Log.write(String(format: "speech model: %@ in %.1f s", listener.isReady ? "ready" : "not ready", Date().timeIntervalSince(t0)))
+        }
+    }
+
+    private func updateSpeech(_ state: SpeechPreparation) {
+        speechMenuItem?.title = state.status
+        speechIndicator?.update(state)
+        // Only update the notch if the user asked to talk before speech was ready.
+        if model.phase == .preparingSpeech {
+            model.status = state.status
+            if state == .ready {
+                model.phase = .done(ok: true)
+                collapse(after: 2)
+            } else if !state.isBusy {
+                model.phase = .message
+                collapse(after: 5)
+            }
+        }
     }
 
     @objc func openSetup() {
@@ -144,10 +183,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Carbon doesn't always report the release (e.g. Option let go first), so also watch Space itself.
         releasePoll?.invalidate()
         releasePoll = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
-            guard let self, self.model.phase == .listening, !self.toggleMode else { self?.releasePoll?.invalidate(); return }
-            let down = CGEventSource.keyState(.combinedSessionState, key: CGKeyCode(Shortcut.current.keyCode))
-            if down { self.sawSpaceDown = true }
-            if !down && self.sawSpaceDown { self.talkReleased() }
+            MainActor.assumeIsolated {
+                guard let self, self.model.phase == .listening, !self.toggleMode else { self?.releasePoll?.invalidate(); return }
+                let down = CGEventSource.keyState(.combinedSessionState, key: CGKeyCode(Shortcut.current.keyCode))
+                if down { self.sawSpaceDown = true }
+                if !down && self.sawSpaceDown { self.talkReleased() }
+            }
         }
     }
 
@@ -165,7 +206,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func startListening() {
         guard model.phase != .listening else { return }
         guard listener.isReady else {
-            show(message: speechState.status.isEmpty ? "The speech model is still loading" : speechState.status, for: 3)
+            model.reset()
+            model.status = speechState.status
+            model.phase = speechState.preparation.isBusy ? .preparingSpeech : .message
+            collapse(after: 3)
             return
         }
         // One token covers recording, final transcription, routing and execution. Replacing
@@ -308,6 +352,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
 @main
 enum Main {
+    @MainActor
     static func main() {
         let app = NSApplication.shared
         let delegate = AppDelegate()

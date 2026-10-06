@@ -68,7 +68,7 @@ struct NotchView: View {
         switch model.phase {
         case .listening: return model.transcript.isEmpty ? "Listening…" : model.transcript
         case .thinking, .acting: return model.transcript
-        case .done, .message: return model.status
+        case .done, .message, .preparingSpeech: return model.status
         case .idle: return ""
         }
     }
@@ -76,7 +76,7 @@ struct NotchView: View {
     @ViewBuilder private var indicator: some View {
         switch model.phase {
         case .listening: Waveform(level: model.level)
-        case .thinking, .acting: ProgressView().controlSize(.small).tint(.white)
+        case .thinking, .acting, .preparingSpeech: ProgressView().controlSize(.small).tint(.white)
         case .done(let ok):
             Image(systemName: ok ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .foregroundStyle(ok ? Color.green : Color.red).font(.system(size: 16))

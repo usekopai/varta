@@ -11,7 +11,6 @@ final class Listener {
     var onPartial: ((String) -> Void)?
     var onLevel: ((Float) -> Void)? { didSet { recorder.onLevel = onLevel } }
     var lastSource: String { hold.lastSource }
-    private(set) var status = "Speech model not loaded"
 
     var isReady: Bool { speech.isReady }
 
@@ -27,21 +26,18 @@ final class Listener {
     }()
 
     /// Download (first run) and load the model; call at launch.
-    func prepare(progress: @escaping (String) -> Void) async {
+    func prepare(progress: @escaping (SpeechPreparation) -> Void) async {
         do {
-            try await speech.prepare(vocabulary: Listener.vocabulary) { [weak self] s in
-                self?.status = s
-                progress(s)
-            }
+            try await speech.prepare(vocabulary: Listener.vocabulary, preparation: progress)
         } catch {
-            status = "Speech model failed to load: \(error)"
-            progress(status)
-            Log.write(status)
+            let state = SpeechPreparation.failed(error.localizedDescription)
+            progress(state)
+            Log.write(state.status)
         }
     }
 
     func start() throws {
-        guard speech.isReady else { throw JevError(description: status) }
+        guard speech.isReady else { throw JevError(description: "Speech is not ready. Check Setup for progress.") }
         try recorder.start()
         let recorder = self.recorder
         hold.begin(snapshot: { recorder.snapshot() }, onPartial: { [weak self] in self?.onPartial?($0) })

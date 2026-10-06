@@ -211,7 +211,7 @@ case "transcribe":
     let speech = LocalSpeech()
     let t0 = Date()
     do {
-        try await speech.prepare(vocabulary: Array(MacSources.installedApps.prefix(40)) + MacSources.builtinSites.map(\.1)) { FileHandle.standardError.write(Data(($0 + "\n").utf8)) }
+        try await speech.prepare(vocabulary: Array(MacSources.installedApps.prefix(40)) + MacSources.builtinSites.map(\.1), progress: { FileHandle.standardError.write(Data(($0 + "\n").utf8)) })
     } catch { fail("\(error)") }
     print(String(format: "model %@ ready in %.1f s", LocalSpeech.model, Date().timeIntervalSince(t0)))
     for file in args.dropFirst() {

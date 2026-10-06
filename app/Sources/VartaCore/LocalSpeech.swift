@@ -43,16 +43,24 @@ public final class LocalSpeech: @unchecked Sendable {
     /// Download the model if needed (once, to ~/.varta/models), then load and prewarm it.
     /// The first load on a Mac also compiles the model for the Neural Engine, which can take a minute;
     /// later launches reuse that and are quick.
-    public func prepare(vocabulary: [String] = [], progress: ((String) -> Void)? = nil) async throws {
-        if isReady { return }
+    public func prepare(vocabulary: [String] = [], preparation: ((SpeechPreparation) -> Void)? = nil,
+                        progress: ((String) -> Void)? = nil) async throws {
+        func report(_ state: SpeechPreparation) {
+            preparation?(state)
+            progress?(state.status)
+        }
+        if isReady { report(.ready); return }
+        report(.preparing)
         var folder = LocalSpeech.localModelFolder()
         if folder == nil {
-            progress?("Downloading the Whisper model…")
+            report(.downloading(nil))
             folder = try await WhisperKit.download(variant: LocalSpeech.model, downloadBase: LocalSpeech.modelsDir) { p in
-                progress?(String(format: "Downloading the Whisper model… %.0f%%", p.fractionCompleted * 100))
+                let state = SpeechPreparation.downloading(p.fractionCompleted)
+                preparation?(state)
+                progress?(state.status)
             }
         }
-        progress?("Loading the Whisper model…")
+        report(.loading)
         let config = WhisperKitConfig(model: LocalSpeech.model, downloadBase: LocalSpeech.modelsDir, modelFolder: folder!.path,
                                       computeOptions: LocalSpeech.computeOptions,
                                       verbose: false, logLevel: .error, prewarm: true, load: true, download: false)
@@ -67,7 +75,7 @@ public final class LocalSpeech: @unchecked Sendable {
             pipe = kit
             promptTokens = tokens
         }
-        progress?("Speech model ready")
+        report(.ready)
     }
 
     /// Transcribe 16 kHz mono float samples.

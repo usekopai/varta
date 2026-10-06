@@ -12,9 +12,13 @@ final class HotkeyState: ObservableObject {
 }
 
 /// Speech model state, shown in Setup and the notch.
-final class SpeechState: ObservableObject {
-    @Published var status = "Preparing the speech model…"
-    @Published var ready = false
+@MainActor final class SpeechState: ObservableObject {
+    @Published var preparation: SpeechPreparation = .preparing { didSet { onChange?(preparation) } }
+    var isPreparing = false
+    var onChange: ((SpeechPreparation) -> Void)?
+    var status: String { preparation.status }
+    var ready: Bool { preparation == .ready }
+    var retry: (() -> Void)?
 }
 
 /// First-run setup: the permissions Varta needs, the local speech model, and API keys.
@@ -36,7 +40,7 @@ struct SetupView: View {
         VStack(alignment: .leading, spacing: 18) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Set up Varta").font(.title2.weight(.semibold))
-                Text("Hold ⌥Space, say what you want, let go.").foregroundStyle(.secondary)
+                Text("Hold \(hotkey.display), say what you want, let go.").foregroundStyle(.secondary)
                 Text("Version \(Varta.version)").font(.caption).foregroundStyle(.tertiary)
             }
 
@@ -58,19 +62,7 @@ struct SetupView: View {
                 .padding(6)
             }
 
-            GroupBox("Speech") {
-                HStack {
-                    Image(systemName: speech.ready ? "checkmark.circle.fill" : "arrow.down.circle")
-                        .foregroundStyle(speech.ready ? .green : .secondary)
-                    VStack(alignment: .leading, spacing: 1) {
-                        Text("Whisper, on this Mac")
-                        Text(speech.ready ? "Ready. Your voice never leaves this Mac." : speech.status)
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                }
-                .padding(6)
-            }
+            SpeechStatusView(preparation: speech.preparation) { speech.retry?() }
 
             GroupBox("Permissions") {
                 VStack(alignment: .leading, spacing: 10) {

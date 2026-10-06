@@ -15,6 +15,7 @@ enum Phase: Equatable {
     case acting
     case done(ok: Bool)
     case message // offline / permission problems
+    case preparingSpeech
 }
 
 /// Everything the notch shows. Mutated on the main thread only.
