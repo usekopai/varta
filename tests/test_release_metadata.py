@@ -63,7 +63,8 @@ class ReleaseMetadataTests(unittest.TestCase):
         self.assertNotIn('Future work.', notes)
         self.assertNotIn('Old change.', notes)
         self.assertIn('Varta-1.2.3-arm64.dmg', notes)
-        self.assertIn('not Developer ID signed or notarized', notes)
+        self.assertIn('not signed with a Developer ID certificate', notes)
+        self.assertIn('not notarized by Apple', notes)
 
     def test_unreleased_or_empty_changelog_rejected(self):
         for text in ['## [Unreleased]\n\nPending\n', '## [1.2.3] - 2026-10-05\n\n', '## [1.2.3]\n\nUndated\n']:
