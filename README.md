@@ -2,25 +2,33 @@
 
 ![Varta — interwoven soundwaves](docs/assets/readme-hero.png)
 
-# Varta by Kopai
+# Varta
 
-**Fast, open-source voice commands that take action on your Mac.**
+### Talk to your Mac. It actually does the thing.
+
+**Hold ⌥Space · say it · let go.** Notes, reminders, calendar events, tabs, music, files — done
+from the notch, with [360 ms median routing](#performance).
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![macOS 15+](https://img.shields.io/badge/macOS-15%2B-black.svg)](#requirements)
+[![Apple silicon](https://img.shields.io/badge/Apple%20silicon-M1%2B-black.svg)](#requirements)
 [![Swift 6](https://img.shields.io/badge/Swift-6-orange.svg)](app/Package.swift)
+[![Latest release](https://img.shields.io/github/v/release/usekopai/varta?label=download)](https://github.com/usekopai/varta/releases/latest)
 
-[Install](#install) · [Commands](docs/COMMANDS.md) · [How it works](#how-it-works) · [Contribute](CONTRIBUTING.md)
+**[⬇ Download for Mac](https://github.com/usekopai/varta/releases/latest)** · [What you can say](#what-you-can-say) · [How it works](#how-it-works) · [Contribute](CONTRIBUTING.md)
 
 </div>
 
-Hold a key, say what you want, let go. Varta turns your words into supported Mac actions,
-shows the result in a small notch panel, then folds away.
+> 🎙️ “remind me tomorrow at 9 AM to review the release” → ✅ saved to Reminders, alarm set, read back to confirm.
 
-We built Varta with local speech recognition, structured model decisions and direct native
-execution. **Varta is an experimental alpha for Apple silicon Macs**, released under the MIT
-licence. You'll need a [TypeSafe API key](https://docs.typesafe.ai) for Jev;
-provider usage charges apply. Microphone audio stays on your Mac; command text goes to Jev.
+- **Your voice never leaves your Mac.** Whisper runs on-device on the Neural Engine via WhisperKit.
+- **It acts, it doesn't just chat.** Native APIs and AppleScript create the note, open the tab, pause the song.
+- **It checks its own work.** Varta reads back what happened and tells you when something doesn't match.
+- **It won't guess.** Low-confidence requests get a clarifying question instead of a wrong action.
+
+Varta is an **experimental alpha** by Kopai, MIT-licensed, for Apple silicon Macs. Routing uses
+[Jev](https://docs.typesafe.ai), so you'll need a TypeSafe API key (provider usage charges apply).
+Microphone audio stays local; the command text is sent to Jev.
 
 ## What you can say
 
