@@ -1,6 +1,6 @@
 <div align="center">
 
-![Varta — interwoven soundwaves](docs/assets/readme-hero.png)
+![Varta — talk to your Mac. Hold ⌥Space, speak, let go.](docs/assets/social-preview.png)
 
 # Varta
 
